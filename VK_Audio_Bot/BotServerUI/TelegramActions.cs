@@ -1,9 +1,10 @@
 ﻿using System;
+
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace VK_Audio_Bot
+namespace BotServerUI
 {
     public class TelegramActions
     {
@@ -66,11 +67,6 @@ namespace VK_Audio_Bot
                 replyMarkup: new ReplyKeyboardHide());
         }
 
-        static public async void Text(Message message, TelegramBotClient Bot)
-        {
-            var answer = Console.ReadLine();
-            await Bot.SendTextMessageAsync(message.Chat.Id, answer,
-                replyMarkup: new ReplyKeyboardHide());
-        }
+
     }
 }

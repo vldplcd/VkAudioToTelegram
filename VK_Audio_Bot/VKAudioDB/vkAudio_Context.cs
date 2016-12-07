@@ -1,9 +1,12 @@
 ﻿using System;
 using MongoDB.Driver;
 using MongoDB.Bson;
+using System.Linq;
+using System.Collections.Generic;
+
 namespace VKAudioDB
 {
-    class vkAudio_Context
+    class vkAudio_Context : IDisposable
     {
         MongoClient client;
         IMongoDatabase database;
@@ -11,20 +14,46 @@ namespace VKAudioDB
 
         public vkAudio_Context()
         {
-            client = new MongoClient(new MongoClientSettings
-            {
-
-            });
+            client = new MongoClient();
             database = client.GetDatabase("bot_users");
         }
-
-        public IMongoCollection<TransportNode> TransportNodes
+        public IMongoCollection<ak> aks
         {
-            get { return database.GetCollection<TransportNode>("TransportNodes"); }
+            get { return database.GetCollection<ak>("ak"); }
         }
-        public IMongoCollection<BsonDocument> TransportNodesBson
+        public IMongoCollection<Track> Tracks
         {
-            get { return database.GetCollection<BsonDocument>("TransportNodes"); }
+            get { return database.GetCollection<Track>("tracks"); }
+        }
+        public IMongoCollection<BsonDocument> TracksBson
+        {
+            get { return database.GetCollection<BsonDocument>("tracks"); }
+        }
+        public IMongoCollection<User> Users
+        {
+            get { return database.GetCollection<User>("users"); }
+        }
+        public IMongoCollection<BsonDocument> UsersBson
+        {
+            get { return database.GetCollection<BsonDocument>("users"); }
+        }
+
+        public async void InsertUser(User user)
+        {
+            if(Users.Find(u => u.chatID == user.chatID).Count() == 0)
+                await Users.InsertOneAsync(user);
+        }
+        public async void InsertTrack(Track track)
+        {
+            if (Tracks.Find(t => t.dbID == track.dbID).Count() == 0)
+                await Tracks.InsertOneAsync(track);
+        }
+
+        public async void UpdateUser(long chatID, List<int> tracks)
+        {
+            var filter = Builders<User>.Filter.Eq((u) => u.chatID, chatID);
+            var update = Builders<User>.Update.Set((u) => u.tracks, tracks);
+            await Users.UpdateManyAsync(filter, update);
         }
 
         public void Dispose()

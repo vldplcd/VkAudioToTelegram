@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading.Tasks;
-
 using Telegram.Bot;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types;
@@ -14,15 +8,19 @@ using Telegram.Bot.Types.InlineQueryResults;
 using Telegram.Bot.Types.InputMessageContents;
 using Telegram.Bot.Types.ReplyMarkups;
 using VK_Audio_Bot;
+using VKAudioDB;
 
 namespace telbot
 {
     class Program
     {
-        static TelegramBotClient Bot = new TelegramBotClient("301705994:AAE3BOPfYKRSrLBdLAC8WGk0LrOAnPIfezc");
+
+        
+        static TelegramBotClient Bot;
         static void Main(string[] args)
         {
-
+            var q = new Queries();
+            Bot = new TelegramBotClient(q.GetKey()[0]);
             Bot.OnMessage += BotOnMessageReceived;
             Bot.OnMessageEdited += BotOnMessageReceived;
             Bot.OnCallbackQuery += BotOnCallbackQueryReceived;

@@ -56,8 +56,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="ak.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries.cs" />
+    <Compile Include="Track.cs" />
+    <Compile Include="Update.cs" />
+    <Compile Include="User.cs" />
     <Compile Include="vkAudio_Context.cs" />
   </ItemGroup>
   <ItemGroup>
