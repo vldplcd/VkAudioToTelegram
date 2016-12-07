@@ -6,5 +6,30 @@
         xmlns:local="clr-namespace:BotServerUI"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="710.577">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="79*"/>
+            <RowDefinition Height="242*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="35*"/>
+            <ColumnDefinition Width="318*"/>
+            <ColumnDefinition Width="350*"/>
+        </Grid.ColumnDefinitions>
+        <Button x:Name="btn_start_bot" Grid.Column="1" HorizontalAlignment="Left" Margin="9.8,10,0,0" VerticalAlignment="Top" Width="75" Height="19" Content="Start bot" Click="btn_start_bot_Click"/>
+        <Button x:Name="btn_stop_bot" Content="Stop bot" Grid.Column="1" HorizontalAlignment="Left" Margin="9.8,46,0,0" VerticalAlignment="Top" Width="75" Height="18" Click="btn_stop_bot_Click"/>
+        <Label x:Name="lbl_activ" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="200.8,22,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.569,0.621" Height="32" Width="62"/>
+        <RichTextBox x:Name="log_box" Grid.Column="1" HorizontalAlignment="Left" Height="112" Margin="9.8,9.8,0,0" Grid.Row="1" VerticalAlignment="Top" Width="299">
+            <FlowDocument>
+                <Paragraph>
+                    <Run Text=""/>
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+        <ComboBox x:Name="cmb_users" Grid.Column="1" HorizontalAlignment="Left" Margin="188.8,143.8,0,0" Grid.Row="1" VerticalAlignment="Top" Width="120" SelectedValuePath="Key" DisplayMemberPath="Value"/>
+        <Label x:Name="lbl_textto" Content="Text to" Grid.Column="1" HorizontalAlignment="Left" Margin="127.8,140.8,0,0" Grid.Row="1" VerticalAlignment="Top"/>
+        <TextBox x:Name="txb_messege" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="9.8,184.8,0,0" Grid.Row="1" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="181"/>
+        <Button x:Name="btn_send" Content="Send" Grid.Column="1" HorizontalAlignment="Left" Margin="233.8,184.8,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Click="btn_send_Click"/>
 
+    </Grid>
 </Window>
