@@ -86,6 +86,7 @@ namespace BotServerUI
             InlineKeyboardButton[][] buttons = new InlineKeyboardButton[tracks.Count + 1][];
             int i = 0;
             foreach (var item in tracks)
+
             {
                 buttons[i] = new InlineKeyboardButton[]
                 {
