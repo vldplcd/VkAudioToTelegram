@@ -1,6 +1,6 @@
 ﻿namespace VKAudioInfoGetter.Model
 {
-    class AudioInfo
+    public class AudioInfo
     {
         public string Artist { get; set; }
 

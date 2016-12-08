@@ -6,10 +6,11 @@ using VKAudioInfoGetter.Model;
 using VKAudioInfoGetter.DTO.Request;
 using VKAudioInfoGetter.DTO.Response;
 using Newtonsoft.Json;
+using System;
 
 namespace VKAudioInfoGetter
 {
-    class Repository
+    public class Repository
     {
         const string VK_Access_Token = "c3ca8f7857dc7a324ecfea0b815a42954926dbfcea20976c83242f4cba59d4149b9bf1fddd4e74ef1e0ac";
         const string TemplateUrl = "https://api.vk.com/method/audio.search?q={0}&auto_complete={1}&lyrics={2}&performer_only={3}&sort={4}&search_own={5}&offset={6}&count={7}&v=5.60&access_token={8}";
@@ -31,8 +32,8 @@ namespace VKAudioInfoGetter
                 };
                 
                 StringContent content = new StringContent("");
-                var responseMsg = await httpClient.PostAsync(string.Format(TemplateUrl, vkRequest.Q, vkRequest.Auto_complete, 
-                    vkRequest.Lyrics,vkRequest.Performer_only, vkRequest.Sort, vkRequest.Search_own, vkRequest.Offset, 
+                var responseMsg = await httpClient.PostAsync(string.Format(TemplateUrl, vkRequest.Q, Convert.ToByte(vkRequest.Auto_complete),
+                    Convert.ToByte(vkRequest.Lyrics), Convert.ToByte(vkRequest.Performer_only), vkRequest.Sort, Convert.ToByte(vkRequest.Search_own), vkRequest.Offset, 
                     vkRequest.Count, VK_Access_Token), content);
 
                 var resultString = await responseMsg.Content.ReadAsStringAsync();

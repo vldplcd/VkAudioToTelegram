@@ -36,7 +36,7 @@ namespace BotServerUI
 
             Binding cmb_us_binding = new Binding();
             cmb_us_binding.Source = usernames;
-            cmb_users.SetBinding(ItemsControl.ItemsSourceProperty, cmb_us_binding);
+            cmb_users.SetBinding(ItemsControl.ItemsSourceProperty, cmb_us_binding);            
         }
 
         private void btn_stop_bot_Click(object sender, RoutedEventArgs e)

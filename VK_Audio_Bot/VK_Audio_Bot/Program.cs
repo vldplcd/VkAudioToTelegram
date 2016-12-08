@@ -9,6 +9,7 @@ using Telegram.Bot.Types.InputMessageContents;
 using Telegram.Bot.Types.ReplyMarkups;
 using VK_Audio_Bot;
 using VKAudioDB;
+using VKAudioInfoGetter;
 
 namespace telbot
 {
@@ -26,12 +27,12 @@ namespace telbot
             Bot.OnInlineResultChosen += BotOnInlineReceived;
 
             var me = Bot.GetMeAsync().Result;
-
+            
             Console.Title = me.Username;
 
             Bot.StartReceiving();
             while (Bot.IsReceiving) { }
-            //Bot.StopReceiving();
+            //Bot.StopReceiving();            
         }
         
         private static async void BotOnMessageReceived(object sender, MessageEventArgs messageEventArgs)

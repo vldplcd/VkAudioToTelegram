@@ -4,15 +4,15 @@
     {
         public string Q { get; set; }
 
-        public short Auto_complete { get; set; }
+        public bool Auto_complete { get; set; }
 
-        public short Lyrics { get; set; }
+        public bool Lyrics { get; set; }
 
-        public short Performer_only { get; set; }
+        public bool Performer_only { get; set; }
 
-        public short Sort { get; set; }
+        public ushort Sort { get; set; }
 
-        public short Search_own { get; set; }
+        public bool Search_own { get; set; }
 
         public int Offset { get; set; }
 

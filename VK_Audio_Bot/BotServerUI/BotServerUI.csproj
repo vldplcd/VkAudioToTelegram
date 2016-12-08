@@ -116,6 +116,10 @@
       <Project>{c68d4731-39c4-47cf-9fd1-73007ee89cb6}</Project>
       <Name>VKAudioDB</Name>
     </ProjectReference>
+    <ProjectReference Include="..\VKAudioInfoGetter\VKAudioInfoGetter.csproj">
+      <Project>{bd6e6fdb-edda-4a7b-a5b6-47c8643d40ba}</Project>
+      <Name>VKAudioInfoGetter</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
