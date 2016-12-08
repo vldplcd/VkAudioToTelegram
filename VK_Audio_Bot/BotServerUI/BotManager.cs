@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using Telegram.Bot;
@@ -10,6 +7,9 @@ using Telegram.Bot.Args;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 using VKAudioDB;
+using VKAudioInfoGetter;
+using VKAudioInfoGetter.Model;
+using Newtonsoft.Json;
 
 namespace BotServerUI
 {
@@ -44,34 +44,59 @@ namespace BotServerUI
             logevent?.Invoke($"\nBot disconnected: {name}");
         }
 
-        Update up = new Update();
+        UpdateDB up = new UpdateDB();
         Queries q = new Queries();
+        InfoGetter ig = new InfoGetter();
+        Dictionary<long, List<AudioInfo>> tracks = new Dictionary<long, List<AudioInfo>>();
+        Dictionary<long, List<AudioInfo>> playlists = new Dictionary<long, List<AudioInfo>>();
 
-        private async void BotOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
+        private void BotOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
         {
-            var message = messageEventArgs.Message;
-            logevent?.Invoke($"\nReceived: {message.Text} From: {message.Chat.FirstName}");
-
-            if (message == null || message.Type != MessageType.TextMessage) return;
-
-            if (message.Text.StartsWith("/start"))
+            Task.Run(async () =>
             {
-                up.InsertUser(message.Chat.Id);
-                TelegramActions.Start(message, Bot);
-            }
-            else if (message.Text.StartsWith("/find "))
-            {
-                TelegramActions.Find(message, Bot);
-            }
-            else
-            {
-                var usage = @"Usage:
-/find  - find track with its name
-";
+                var message = messageEventArgs.Message;
+                logevent?.Invoke($"\nReceived: {message.Text} From: {message.Chat.FirstName}");
 
-                await Bot.SendTextMessageAsync(message.Chat.Id, usage,
-                    replyMarkup: new ReplyKeyboardHide());
-            }
+                if (message == null || message.Type != MessageType.TextMessage) return;
+
+                if (message.Text.StartsWith("/start"))
+                {
+                    up.InsertUser(message.Chat.Id);
+                    TelegramActions.Start(message, Bot);
+                }
+                else if (message.Text.StartsWith("/find "))
+                {
+                    var chID = message.Chat.Id;
+                    if (!tracks.ContainsKey(chID))
+                        tracks.Add(chID, new List<AudioInfo>());
+                    tracks[chID] = await ig.GetMusic(message.Text.Substring(6));
+                    TelegramActions.Find(message, Bot, tracks[chID].GetRange(0,
+                        tracks[chID].Count < 10 ? tracks[chID].Count : 10));
+                }
+                else if (message.Text.StartsWith("/playlist"))
+                {
+                    var chID = message.Chat.Id;
+                    var TracksJson = q.GetUsersTracks(chID);
+                    List<AudioInfo> playlist = new List<AudioInfo>();
+                    foreach (var track in TracksJson)
+                    {
+                        playlist.Add(JsonConvert.DeserializeObject<AudioInfo>(track));
+                    }
+                    if (!playlists.ContainsKey(chID))
+                        playlists.Add(chID, new List<AudioInfo>());
+                    playlists[chID] = playlist;
+                    TelegramActions.ShowPlaylist(message, Bot, playlist);
+                }
+                else
+                {
+                    var usage = @"Usage:
+/find  - find track with its name";
+
+                    await Bot.SendTextMessageAsync(message.Chat.Id, usage,
+                        replyMarkup: new ReplyKeyboardHide());
+                }
+            });
+
         }
 
         public async Task SendMessage(long chatID, string answer)
@@ -81,19 +106,32 @@ namespace BotServerUI
             logevent?.Invoke($"\nSent: {answer}   To: {(await Bot.GetChatAsync(chatID)).FirstName}");
         }
 
-        private async void BotOnCallbackQueryReceived(object sender, CallbackQueryEventArgs callbackQueryEventArgs)
+        private void BotOnCallbackQueryReceived(object sender, CallbackQueryEventArgs callbackQueryEventArgs)
         {
-            await Bot.AnswerCallbackQueryAsync(callbackQueryEventArgs.CallbackQuery.Id,
+            Task.Run(async () =>
+            {
+                await Bot.AnswerCallbackQueryAsync(callbackQueryEventArgs.CallbackQuery.Id,
                 $"Wait a little, pls");
+                int trID;
+                var chID = callbackQueryEventArgs.CallbackQuery.From.Id;
+                if (int.TryParse(callbackQueryEventArgs.CallbackQuery.Data, out trID))
+                {
+                    TelegramActions.SendTrack(chID, trID, tracks[chID], Bot, false);
+                }
+                else if (callbackQueryEventArgs.CallbackQuery.Data.StartsWith("s") &&
+                        int.TryParse(callbackQueryEventArgs.CallbackQuery.Data.Substring(1), out trID))
+                {
+                    var track = tracks[chID].Find(x => x.Id == trID);
+                    up.InsertTrack(track.Id, track.Title, track.Artist, track.Duration, track.Lyrics_id, track.Url);
+                    up.UpdateUser(chID, trID);
+                }
+                else if (callbackQueryEventArgs.CallbackQuery.Data.StartsWith("p") &&
+                        int.TryParse(callbackQueryEventArgs.CallbackQuery.Data.Substring(1), out trID))
+                {
+                    TelegramActions.SendTrack(chID, trID, playlists[chID], Bot, true);
+                }
+            });
 
-            if (callbackQueryEventArgs.CallbackQuery.Data != "Save")
-            {
-                await Bot.SendAudioAsync(callbackQueryEventArgs.CallbackQuery.From.Id, "https://www.youtube.com/audiolibrary_download?vid=ffc2e9ed58bd5f29", 230, "meh", "meh");
-            }
-            else
-            {
-
-            }
         }
 
         private void BotOnInlineReceived(object sender, ChosenInlineResultEventArgs chosenInlineResultEventArgs)
