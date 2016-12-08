@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using VK_Audio_Bot.Model;
-using VK_Audio_Bot.DTO.Request;
-using VK_Audio_Bot.DTO.Response;
+using VKAudioInfoGetter.Model;
+using VKAudioInfoGetter.DTO.Request;
+using VKAudioInfoGetter.DTO.Response;
 using Newtonsoft.Json;
 
-namespace VK_Audio_Bot
+namespace VKAudioInfoGetter
 {
     class Repository
     {
@@ -44,7 +42,9 @@ namespace VK_Audio_Bot
                 {
                     Artist = ai.Artist,
                     Title = ai.Title,
-                    Duration = ai.Duration
+                    Duration = ai.Duration,
+                    Url = ai.Url,
+                    Lyrics_id = ai.Lyrics_id
                 }).ToList();
                 return items;
             }

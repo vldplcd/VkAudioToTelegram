@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VKAudioDB", "VKAudioDB\VKAu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotServerUI", "BotServerUI\BotServerUI.csproj", "{8CF8EFE1-C2AD-4061-A8F2-6A9F45944D0A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VKAudioInfoGetter", "VKAudioInfoGetter\VKAudioInfoGetter.csproj", "{BD6E6FDB-EDDA-4A7B-A5B6-47C8643D40BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{8CF8EFE1-C2AD-4061-A8F2-6A9F45944D0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CF8EFE1-C2AD-4061-A8F2-6A9F45944D0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8CF8EFE1-C2AD-4061-A8F2-6A9F45944D0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD6E6FDB-EDDA-4A7B-A5B6-47C8643D40BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD6E6FDB-EDDA-4A7B-A5B6-47C8643D40BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD6E6FDB-EDDA-4A7B-A5B6-47C8643D40BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD6E6FDB-EDDA-4A7B-A5B6-47C8643D40BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

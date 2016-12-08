@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace VK_Audio_Bot.DTO.Response
+namespace VKAudioInfoGetter.DTO.Response
 {
     class VKResponse
     {

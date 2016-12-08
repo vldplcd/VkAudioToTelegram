@@ -30,27 +30,10 @@ namespace telbot
             Console.Title = me.Username;
 
             Bot.StartReceiving();
-            while (Bot.IsReceiving) { GetMusic(); }
+            while (Bot.IsReceiving) { }
             //Bot.StopReceiving();
         }
-
-        static async void GetMusic()
-        {
-            var r = new Repository();
-            var request = new AudioRequest("Thousand Foot Krutch", 1, 0, 0, 2, 1, 0, 10);
-
-            try
-            {
-                var result = await r.GetAudioList(request);
-                foreach (var item in result)
-                    Console.WriteLine("\n{0} - {1}, {2}", item.Artist, item.Title, item.Duration);             
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-        }
-
+        
         private static async void BotOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
         {
             var message = messageEventArgs.Message;
