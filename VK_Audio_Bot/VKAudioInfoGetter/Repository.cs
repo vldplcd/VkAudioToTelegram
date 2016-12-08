@@ -12,7 +12,7 @@ namespace VKAudioInfoGetter
 {
     public class Repository
     {
-        const string VK_Access_Token = "c3ca8f7857dc7a324ecfea0b815a42954926dbfcea20976c83242f4cba59d4149b9bf1fddd4e74ef1e0ac";
+        const string VK_Access_Token = "d5c2f0884b410ffd0ae6b52c032c8d6281d871acbbaedd3b1375aa67988c80a0a455ba3d231dc307d6328";
         const string TemplateUrl = "https://api.vk.com/method/audio.search?q={0}&auto_complete={1}&lyrics={2}&performer_only={3}&sort={4}&search_own={5}&offset={6}&count={7}&v=5.60&access_token={8}";
 
         public async Task<List<AudioInfo>> GetAudioList(AudioRequest request)
@@ -41,6 +41,7 @@ namespace VKAudioInfoGetter
 
                 var items = result.TrackInfo.Items.Select(ai => new AudioInfo
                 {
+                    Id = ai.Id,
                     Artist = ai.Artist,
                     Title = ai.Title,
                     Duration = ai.Duration,

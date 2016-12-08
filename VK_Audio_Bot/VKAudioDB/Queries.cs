@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace VKAudioDB
 {
@@ -38,6 +39,22 @@ namespace VKAudioDB
             using (vkAudio_Context vc = new vkAudio_Context())
             {
                 vc.Users.Find(u => u.chatID > 0).ToList().ForEach(u => res.Add(u.chatID));
+            }
+            return res;
+        }
+
+        public List<string> GetUsersTracks(long chID)
+        {
+            List<int> ids = new List<int>();
+            List<string> res = new List<string>();
+
+            using (vkAudio_Context vc = new vkAudio_Context())
+            {
+                ids = vc.Users.Find(u => u.chatID == chID).Single().tracks;
+                foreach(int id in ids)
+                {
+                    res.Add(JsonConvert.SerializeObject(vc.Tracks.Find(t => t.dbID == id).Single()));
+                }
             }
             return res;
         }
