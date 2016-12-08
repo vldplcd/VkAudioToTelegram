@@ -12,6 +12,7 @@ namespace VKAudioDB
     {
         [BsonRepresentation(BsonType.ObjectId)]
         public ObjectId _id { get; set; }
+
         public string value { get; set; }
     }
 }

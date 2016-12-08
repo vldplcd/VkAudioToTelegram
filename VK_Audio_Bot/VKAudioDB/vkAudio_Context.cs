@@ -17,22 +17,27 @@ namespace VKAudioDB
             client = new MongoClient();
             database = client.GetDatabase("bot_users");
         }
+
         public IMongoCollection<ak> aks
         {
             get { return database.GetCollection<ak>("ak"); }
         }
+
         public IMongoCollection<Track> Tracks
         {
             get { return database.GetCollection<Track>("tracks"); }
         }
+
         public IMongoCollection<BsonDocument> TracksBson
         {
             get { return database.GetCollection<BsonDocument>("tracks"); }
         }
+
         public IMongoCollection<User> Users
         {
             get { return database.GetCollection<User>("users"); }
         }
+
         public IMongoCollection<BsonDocument> UsersBson
         {
             get { return database.GetCollection<BsonDocument>("users"); }
@@ -43,6 +48,7 @@ namespace VKAudioDB
             if(Users.Find(u => u.chatID == user.chatID).Count() == 0)
                 await Users.InsertOneAsync(user);
         }
+
         public async void InsertTrack(Track track)
         {
             if (Tracks.Find(t => t.dbID == track.dbID).Count() == 0)
@@ -61,6 +67,7 @@ namespace VKAudioDB
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
         protected virtual void Dispose(bool disposing)
         {
             if (!disposed)

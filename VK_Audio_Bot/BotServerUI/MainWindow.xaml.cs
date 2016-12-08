@@ -30,7 +30,6 @@ namespace BotServerUI
 
         private async void btn_start_bot_Click(object sender, RoutedEventArgs e)
         {
-            
             await botm.StartBot();
             Dictionary<long, string> usernames = new Dictionary<long, string>();
             await Task.Run(() => { usernames = botm.Usernames().Result; });

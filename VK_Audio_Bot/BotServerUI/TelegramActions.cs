@@ -66,7 +66,5 @@ namespace BotServerUI
             await Bot.SendTextMessageAsync(message.Chat.Id, greeting,
                 replyMarkup: new ReplyKeyboardHide());
         }
-
-
     }
 }

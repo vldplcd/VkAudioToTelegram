@@ -14,9 +14,8 @@ namespace telbot
 {
     class Program
     {
-
-        
         static TelegramBotClient Bot;
+
         static void Main(string[] args)
         {
             var q = new Queries();
@@ -31,15 +30,35 @@ namespace telbot
             Console.Title = me.Username;
 
             Bot.StartReceiving();
-            while (Bot.IsReceiving) { }
+            while (Bot.IsReceiving) { GetMusic(); }
             //Bot.StopReceiving();
         }
+
+        static async void GetMusic()
+        {
+            var r = new Repository();
+            var request = new AudioRequest("Thousand Foot Krutch", 1, 0, 0, 2, 1, 0, 10);
+
+            try
+            {
+                var result = await r.GetAudioList(request);
+                foreach (var item in result)
+                    Console.WriteLine("\n{0} - {1}, {2}", item.Artist, item.Title, item.Duration);             
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
         private static async void BotOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
         {
             var message = messageEventArgs.Message;
+
             Console.WriteLine($"Received: {message.Text} From: {message.Chat.FirstName}");
 
             if (message == null || message.Type != MessageType.TextMessage) return;
+
             if (message.Text.StartsWith("/start"))
             {
                 TelegramActions.Start(message, Bot);
@@ -69,18 +88,19 @@ namespace telbot
                 $"Wait a little, pls");
             if (callbackQueryEventArgs.CallbackQuery.Data != "Save")
             {
-                    await Bot.SendAudioAsync(callbackQueryEventArgs.CallbackQuery.From.Id, "https://www.youtube.com/audiolibrary_download?vid=ffc2e9ed58bd5f29", 230, "meh", "meh");
+                await Bot.SendAudioAsync(callbackQueryEventArgs.CallbackQuery.From.Id, "https://www.youtube.com/audiolibrary_download?vid=ffc2e9ed58bd5f29", 230, "meh", "meh");
             }
             else
             {
 
             }
         }
+
         private static void BotOnInlineReceived(object sender, ChosenInlineResultEventArgs chosenInlineResultEventArgs)
         {
             Console.WriteLine($"Received choosen inline result: {chosenInlineResultEventArgs.ChosenInlineResult.ResultId}");
         }
     }
-
-
 }
+
+

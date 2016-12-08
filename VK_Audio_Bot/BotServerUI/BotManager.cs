@@ -14,14 +14,16 @@ using VKAudioDB;
 namespace BotServerUI
 {
     public delegate void Log(string log);
+
     class BotManager
     {
         public event Log logevent;
         TelegramBotClient Bot;
         string name;
+
         public async Task StartBot()
         {
-            if(Bot == null)
+            if (Bot == null)
             {
                 var q = new Queries();
                 Bot = new TelegramBotClient(q.GetKey()[0]);
@@ -34,7 +36,6 @@ namespace BotServerUI
 
             Bot.StartReceiving();
             logevent?.Invoke($"\nBot connected: {name}");
-            
         }
 
         public void StopBot()
@@ -45,12 +46,14 @@ namespace BotServerUI
 
         Update up = new Update();
         Queries q = new Queries();
+
         private async void BotOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
         {
             var message = messageEventArgs.Message;
             logevent?.Invoke($"\nReceived: {message.Text} From: {message.Chat.FirstName}");
 
             if (message == null || message.Type != MessageType.TextMessage) return;
+
             if (message.Text.StartsWith("/start"))
             {
                 up.InsertUser(message.Chat.Id);
@@ -71,11 +74,10 @@ namespace BotServerUI
             }
         }
 
-
         public async Task SendMessage(long chatID, string answer)
         {
             await Bot.SendTextMessageAsync(chatID, answer,
-                    replyMarkup: new ReplyKeyboardHide());
+                replyMarkup: new ReplyKeyboardHide());
             logevent?.Invoke($"\nSent: {answer}   To: {(await Bot.GetChatAsync(chatID)).FirstName}");
         }
 
@@ -83,6 +85,7 @@ namespace BotServerUI
         {
             await Bot.AnswerCallbackQueryAsync(callbackQueryEventArgs.CallbackQuery.Id,
                 $"Wait a little, pls");
+
             if (callbackQueryEventArgs.CallbackQuery.Data != "Save")
             {
                 await Bot.SendAudioAsync(callbackQueryEventArgs.CallbackQuery.From.Id, "https://www.youtube.com/audiolibrary_download?vid=ffc2e9ed58bd5f29", 230, "meh", "meh");
@@ -95,7 +98,7 @@ namespace BotServerUI
 
         private void BotOnInlineReceived(object sender, ChosenInlineResultEventArgs chosenInlineResultEventArgs)
         {
-            logevent?.Invoke($"\nReceived choosen inline result: {chosenInlineResultEventArgs.ChosenInlineResult.ResultId}");
+            logevent?.Invoke($"\nReceived chosen inline result: {chosenInlineResultEventArgs.ChosenInlineResult.ResultId}");
         }
 
         public async Task<Dictionary<long, string>> Usernames()
@@ -103,10 +106,10 @@ namespace BotServerUI
             Dictionary<long, string> res = new Dictionary<long, string>();
             res.Add(0, "All");
             var ids = q.GetChatIds();
-            
+
             foreach (var item in ids)
             {
-                var chat = await Bot.GetChatAsync(item);                
+                var chat = await Bot.GetChatAsync(item);
                 res.Add(item, chat.FirstName + " " + chat.LastName);
             }
             return res;

@@ -11,14 +11,16 @@ namespace VKAudioDB
         public void InsertUser(long ChatID)
         {
             using (vkAudio_Context vc = new vkAudio_Context())
-            { 
+            {
                 vc.InsertUser(new User { chatID = ChatID });
             }
         }
+
         public void InsertTrack()
         {
 
         }
+
         public void UpdateUser(long chatID, List<int> tracks)
         {
             using (vkAudio_Context vc = new vkAudio_Context())

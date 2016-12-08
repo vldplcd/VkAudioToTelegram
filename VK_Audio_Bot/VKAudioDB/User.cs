@@ -12,7 +12,9 @@ namespace VKAudioDB
     {
         [BsonRepresentation(BsonType.ObjectId)]
         public ObjectId _id { get; set; }
+
         public long chatID { get; set; }
+
         public List<int> tracks { get; set; }
     }
 }

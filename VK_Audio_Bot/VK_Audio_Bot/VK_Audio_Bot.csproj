@@ -56,6 +56,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\AudioInfo.cs" />
+    <Compile Include="Model\AudioRequest.cs" />
     <Compile Include="DTO\Request\VKRequest.cs" />
     <Compile Include="DTO\Response\Item.cs" />
     <Compile Include="DTO\Response\TrackInfo.cs" />
