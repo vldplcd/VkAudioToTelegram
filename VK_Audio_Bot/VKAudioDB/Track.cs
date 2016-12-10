@@ -12,6 +12,9 @@ namespace VKAudioDB
         [JsonProperty("id")]
         public int dbID { get; set; }
 
+        [JsonProperty("owner_id")]
+        public int owner_id { get; set; }
+
         [JsonProperty("artist")]
         public string artist { get; set; }
 

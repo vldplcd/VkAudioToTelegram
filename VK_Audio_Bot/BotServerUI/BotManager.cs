@@ -145,7 +145,7 @@ namespace BotServerUI
                         int.TryParse(callbackQueryEventArgs.CallbackQuery.Data.Substring(1), out trID))
                 {
                     var track = tracks[chID].Find(x => x.Id == trID);
-                    up.InsertTrack(track.Id, track.Lyrics_id, track.FileId, track.isUploaded, track.Title, track.Artist);
+                    up.InsertTrack(track.Id, track.Lyrics_id, track.FileId, track.isUploaded, track.Title, track.Artist, track.Owner_id);
                     up.UpdateUser(chID, trID);
                     await Bot.AnswerCallbackQueryAsync(callbackQueryEventArgs.CallbackQuery.Id,
                         $"Saved {track.Title} to playlist");

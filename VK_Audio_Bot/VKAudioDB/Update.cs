@@ -17,7 +17,7 @@ namespace VKAudioDB
             }
         }
 
-        public void InsertTrack(int id, int lyrics_id, string file_id, bool isUploaded, string title, string artist)
+        public void InsertTrack(int id, int lyrics_id, string file_id, bool isUploaded, string title, string artist, int owner_id)
         {
             using (vkAudio_Context vc = new vkAudio_Context())
             {
@@ -28,7 +28,8 @@ namespace VKAudioDB
                     title = title,
                     artist = artist,
                     file_id = file_id,
-                    isUploaded = isUploaded
+                    isUploaded = isUploaded,
+                    owner_id = owner_id
                 });
             }
         }
