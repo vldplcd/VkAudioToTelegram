@@ -13,22 +13,22 @@ namespace VKAudioDB
         {
             using (vkAudio_Context vc = new vkAudio_Context())
             {
-                vc.InsertUser(new User { chatID = ChatID });
+                vc.InsertUser(new User { chatID = ChatID, tracks = new List<int>()});
             }
         }
 
-        public void InsertTrack(int id, string title, string artist, int duration, int lyrics_id, string url)
+        public void InsertTrack(int id, int lyrics_id, string file_id, bool isUploaded, string title, string artist)
         {
             using (vkAudio_Context vc = new vkAudio_Context())
             {
                 vc.InsertTrack(new Track
                 {
                     dbID = id,
+                    lyrics_id = lyrics_id,
                     title = title,
                     artist = artist,
-                    duration = duration,
-                    lyrics_id = lyrics_id,
-                    url = url
+                    file_id = file_id,
+                    isUploaded = isUploaded
                 });
             }
         }
@@ -38,8 +38,6 @@ namespace VKAudioDB
             using (vkAudio_Context vc = new vkAudio_Context())
             {
                 var tr = vc.Users.Find(x => x.chatID == chatID).Single().tracks;
-                if (tr == null)
-                    tr = new List<int>();
                 if (!tr.Any(t => t == track))
                     tr.Add(track);
                 vc.UpdateUser(chatID, tr);

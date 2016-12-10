@@ -10,9 +10,9 @@ namespace BotServerUI
 {
     public class TelegramActions
     {
-        static public async void Find(Message message, TelegramBotClient Bot, List<AudioInfo> tracks)
+        static public async void Find(long chatID, TelegramBotClient Bot, List<AudioInfo> tracks, bool isNextExists, bool isPreviousExists)
         {
-            InlineKeyboardButton[][] buttons = new InlineKeyboardButton[tracks.Count + 1][];
+            InlineKeyboardButton[][] buttons = new InlineKeyboardButton[tracks.Count + 2][];
             int i = 0;
             foreach (var item in tracks)
             {
@@ -26,16 +26,38 @@ namespace BotServerUI
 
                 i++;
             }
-            buttons[i] = new InlineKeyboardButton[]
+            buttons[i] = isNextExists ? new InlineKeyboardButton[]
                     {
                         new InlineKeyboardButton("Next")
                         {
-                            CallbackData = "Next"
+                            CallbackData = "n"
+                        }
+                    } : new InlineKeyboardButton[]
+                    {
+                        new InlineKeyboardButton("No more :(")
+                        {
+
                         }
                     };
+            buttons[i+1] = isPreviousExists? new InlineKeyboardButton[]
+                    {
+                        new InlineKeyboardButton("Previous")
+                        {
+                            CallbackData = "p"
+                        }
+                    } : new InlineKeyboardButton[]
+                    {
+                        new InlineKeyboardButton("No previous :(")
+                        {
+
+                        }
+                    };
+
+
             var keyboard = new InlineKeyboardMarkup(buttons);
-            await Bot.SendTextMessageAsync(message.Chat.Id, "Choose",
+            var m = await Bot.SendTextMessageAsync(chatID, "Choose",
                 replyMarkup: keyboard);
+            
         }
 
         static public async void Start(Message message, TelegramBotClient Bot)
@@ -63,16 +85,34 @@ namespace BotServerUI
                                 CallbackData = $"s{trID}"
                             }
                         });
-                WebRequest request = WebRequest.Create(track.Url);
-
-                using (WebResponse response = request.GetResponse())
+                if(track.isUploaded)
                 {
-                    using (Stream responseStream = response.GetResponseStream())
+                    await Bot.SendAudioAsync(chID, track.FileId, track.Duration,
+                            track.Title, track.Artist, replyMarkup: keyboard);
+                }
+                else
+                {
+                    WebRequest request = WebRequest.Create(track.Url);
+                    using (WebResponse response = request.GetResponse())
                     {
-                        await Bot.SendAudioAsync(chID, new FileToSend("track.mp3", responseStream), track.Duration,
-                        track.Title, track.Artist, replyMarkup: keyboard);
+                        using (Stream responseStream = response.GetResponseStream())
+                        {
+                            try
+                            {
+                                var audio_m = await Bot.SendAudioAsync(chID, new FileToSend("track.mp3", responseStream), track.Duration,
+                            track.Title, track.Artist, replyMarkup: keyboard);
+                                track.isUploaded = true;
+                                track.FileId = audio_m.Audio.FileId;
+                            }
+                            catch
+                            {
+
+                            }
+
+                        }
                     }
                 }
+                
             }
             else
             {
@@ -80,9 +120,9 @@ namespace BotServerUI
             }
         }
 
-        static public async void ShowPlaylist(Message message, TelegramBotClient Bot, List<AudioInfo> tracks)
+        static public async void ShowPlaylist(long chID, TelegramBotClient Bot, List<AudioInfo> tracks, bool isNextExists, bool isPreviousExists)
         {
-            InlineKeyboardButton[][] buttons = new InlineKeyboardButton[tracks.Count + 1][];
+            InlineKeyboardButton[][] buttons = new InlineKeyboardButton[tracks.Count + 2][];
             int i = 0;
 
             foreach (var item in tracks)
@@ -97,15 +137,34 @@ namespace BotServerUI
 
                 i++;
             }
-            buttons[i] = new InlineKeyboardButton[]
+            buttons[i] = isNextExists ? new InlineKeyboardButton[]
                     {
                         new InlineKeyboardButton("Next")
                         {
-                            CallbackData = "Next"
+                            CallbackData = "np"
+                        }
+                    } : new InlineKeyboardButton[]
+                    {
+                        new InlineKeyboardButton("No more :(")
+                        {
+
+                        }
+                    };
+            buttons[i + 1] = isPreviousExists ? new InlineKeyboardButton[]
+                    {
+                        new InlineKeyboardButton("Previous")
+                        {
+                            CallbackData = "pp"
+                        }
+                    } : new InlineKeyboardButton[]
+                    {
+                        new InlineKeyboardButton("No previous :(")
+                        {
+
                         }
                     };
             var keyboard = new InlineKeyboardMarkup(buttons);
-            await Bot.SendTextMessageAsync(message.Chat.Id, "Playlist",
+            await Bot.SendTextMessageAsync(chID, "Playlist",
                 replyMarkup: keyboard);
         }
     }

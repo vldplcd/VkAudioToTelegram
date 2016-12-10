@@ -21,5 +21,11 @@ namespace VKAudioInfoGetter.Model
 
         [JsonProperty("lyrics_id")]
         public int Lyrics_id { get; set; }
+
+        [JsonProperty("isUploaded")]
+        public bool isUploaded { get; set; }
+
+        [JsonProperty("file_id")]
+        public string FileId { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace VKAudioInfoGetter
 {
     public class Repository
     {
-        const string VK_Access_Token = "798d601fa08a554ba2cacbb92b0828d30f5da996c629ad3f2291e979039e150fbd6864c4e8a2a99edc7c7";
+        const string VK_Access_Token = "72ff749103be066406915619f0e28c5b2f66526139229eceab7bf23d75b1e94a4f7bfcd1c022edb014e60";
         const string TemplateUrl = "https://api.vk.com/method/audio.search?q={0}&auto_complete={1}&lyrics={2}&performer_only={3}&sort={4}&search_own={5}&offset={6}&count={7}&v=5.60&access_token={8}";
 
         public async Task<List<AudioInfo>> GetAudioList(AudioRequest request)

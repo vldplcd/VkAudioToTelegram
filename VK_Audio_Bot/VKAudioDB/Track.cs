@@ -21,10 +21,14 @@ namespace VKAudioDB
         [JsonProperty("duration")]
         public int duration { get; set; }
 
-        [JsonProperty("url")]
-        public string url { get; set; }
+        [JsonProperty("file_id")]
+        public string file_id { get; set; }
 
         [JsonProperty("lyrics_id")]
         public int lyrics_id { get; set; }
+
+        [JsonProperty("isUploaded")]
+        public bool isUploaded { get; set; }
+
     }
 }

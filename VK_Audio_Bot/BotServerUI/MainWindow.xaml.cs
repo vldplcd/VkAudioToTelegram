@@ -32,7 +32,7 @@ namespace BotServerUI
         {
             await botm.StartBot();
             Dictionary<long, string> usernames = new Dictionary<long, string>();
-            await Task.Run(() => { usernames = botm.Usernames().Result; });
+            usernames = await botm.Usernames();
 
             Binding cmb_us_binding = new Binding();
             cmb_us_binding.Source = usernames;
