@@ -27,6 +27,7 @@ namespace telbot
             Bot.OnInlineResultChosen += BotOnInlineReceived;
 
             var me = Bot.GetMeAsync().Result;
+
             
             Console.Title = me.Username;
 
