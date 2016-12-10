@@ -44,11 +44,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTO\Request\VKIdRequest.cs" />
     <Compile Include="DTO\Request\VKRequest.cs" />
     <Compile Include="DTO\Response\Item.cs" />
     <Compile Include="DTO\Response\TrackInfo.cs" />
     <Compile Include="DTO\Response\VKResponse.cs" />
     <Compile Include="InfoGetter.cs" />
+    <Compile Include="Model\AudioIdRequest.cs" />
     <Compile Include="Model\AudioInfo.cs" />
     <Compile Include="Model\AudioRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

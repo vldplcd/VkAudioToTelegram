@@ -7,6 +7,9 @@ namespace VKAudioInfoGetter.DTO.Response
         [JsonProperty("id")]
         public int Id { get; set; }
 
+        [JsonProperty("owner_id")]
+        public int Owner_id { get; set; }
+
         [JsonProperty("artist")]
         public string Artist { get; set; }
 

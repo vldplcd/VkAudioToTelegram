@@ -1,6 +1,6 @@
 ﻿namespace VKAudioInfoGetter.Model
 {
-     public class AudioRequest
+    public class AudioRequest
     {
         public string Q { get; set; }
 
