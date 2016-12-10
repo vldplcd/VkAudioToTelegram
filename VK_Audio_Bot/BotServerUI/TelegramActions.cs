@@ -62,7 +62,7 @@ namespace BotServerUI
 
         static public async void Start(Message message, TelegramBotClient Bot)
         {
-            var greeting = $"Hello, {message.Chat.FirstName}!\nThis is VK audio bot. As you will see, it provides you an opportunity to listen to music from vk.com right here.\nType /find Track_name to find track";
+            var greeting = $"Hello, {message.Chat.FirstName}!\nThis is VK audio bot. As you will see, it provides you an opportunity to listen to music from vk.com right here.\nType /find Track_name to find track\nType /playlist to see your playlist";
             await Bot.SendTextMessageAsync(message.Chat.Id, greeting,
                 replyMarkup: new ReplyKeyboardHide());
         }

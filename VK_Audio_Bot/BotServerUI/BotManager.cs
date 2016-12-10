@@ -103,7 +103,8 @@ namespace BotServerUI
                 else
                 {
                     var usage = @"Usage:
-/find  - find track with its name";
+/find  - find track with its name
+/playlist - see your playlist";
 
                     await Bot.SendTextMessageAsync(message.Chat.Id, usage,
                         replyMarkup: new ReplyKeyboardHide());
@@ -135,8 +136,8 @@ namespace BotServerUI
                     }
                     catch (Exception ex)
                     {
-                        await Bot.AnswerCallbackQueryAsync(callbackQueryEventArgs.CallbackQuery.Id,
-                        $"Failed. Maybe you should try /find again");
+                        await Bot.SendTextMessageAsync(callbackQueryEventArgs.CallbackQuery.Id,
+                        $"Failed to show track. Maybe you should try /find again");
                         logevent?.Invoke($"\n{ex.Message}");
                     }
                     
@@ -144,11 +145,21 @@ namespace BotServerUI
                 else if (callbackQueryEventArgs.CallbackQuery.Data.StartsWith("s") &&
                         int.TryParse(callbackQueryEventArgs.CallbackQuery.Data.Substring(1), out trID))
                 {
-                    var track = tracks[chID].Find(x => x.Id == trID);
-                    up.InsertTrack(track.Id, track.Lyrics_id, track.FileId, track.isUploaded, track.Title, track.Artist, track.Owner_id);
-                    up.UpdateUser(chID, trID);
-                    await Bot.AnswerCallbackQueryAsync(callbackQueryEventArgs.CallbackQuery.Id,
-                        $"Saved {track.Title} to playlist");
+                    try
+                    {
+                        var track = tracks[chID].Find(x => x.Id == trID);
+                        up.InsertTrack(track.Id, track.Lyrics_id, track.FileId, track.isUploaded, track.Title, track.Artist, track.Owner_id);
+                        up.UpdateUser(chID, trID);
+                        await Bot.AnswerCallbackQueryAsync(callbackQueryEventArgs.CallbackQuery.Id,
+                            $"Saved {track.Title} to playlist");
+                    }
+                    catch (Exception ex)
+                    {
+                        await Bot.SendTextMessageAsync(callbackQueryEventArgs.CallbackQuery.Id,
+                        $"Failed. You cannot save any track from previous requests, sry(9((\nTry find it again");
+                        logevent?.Invoke($"\n{ex.Message}");
+                    }
+                    
                 }
                 else if (callbackQueryEventArgs.CallbackQuery.Data.StartsWith("p") &&
                         int.TryParse(callbackQueryEventArgs.CallbackQuery.Data.Substring(1), out trID))
