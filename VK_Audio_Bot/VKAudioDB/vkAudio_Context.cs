@@ -43,6 +43,11 @@ namespace VKAudioDB
             get { return database.GetCollection<BsonDocument>("users"); }
         }
 
+        public IMongoCollection<SavedInfo> SavedInfo
+        {
+            get { return database.GetCollection<SavedInfo>("savedInfo"); }
+        }
+
         public async void InsertUser(User user)
         {
             if(Users.Find(u => u.chatID == user.chatID).Count() == 0)
@@ -60,6 +65,13 @@ namespace VKAudioDB
             var filter = Builders<User>.Filter.Eq((u) => u.chatID, chatID);
             var update = Builders<User>.Update.Set((u) => u.tracks, tracks);
             await Users.UpdateManyAsync(filter, update);
+        }
+
+        public async void UpdateSavedInfo (string sID, Dictionary<string, object> info)
+        {
+            var filter = Builders<SavedInfo>.Filter.Eq((si) => si.sID, sID);
+            var update = Builders<SavedInfo>.Update.Set((si) => si.Info, info);
+            await SavedInfo.UpdateOneAsync(filter, update);
         }
 
         public void Dispose()

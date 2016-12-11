@@ -44,5 +44,14 @@ namespace VKAudioDB
                 vc.UpdateUser(chatID, tr);
             }
         }
+
+        public void UpdateSInfo(string sID, Dictionary<string, object> info)
+        {
+            using (vkAudio_Context vc = new vkAudio_Context())
+            {
+                vc.UpdateSavedInfo(sID, info);
+            }
+        }
+
     }
 }

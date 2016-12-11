@@ -63,6 +63,7 @@
     <Compile Include="ak.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries.cs" />
+    <Compile Include="SavedInfo.cs" />
     <Compile Include="Track.cs" />
     <Compile Include="Update.cs" />
     <Compile Include="User.cs" />

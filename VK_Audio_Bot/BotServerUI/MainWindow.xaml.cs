@@ -21,6 +21,7 @@ namespace BotServerUI
             Dispatcher.Invoke(() => log_box.AppendText(""));
             botm.logevent += AppendLog;
             txb_messege.Text = "";
+            Closing += botm.OnClosing;
         }
 
         private void AppendLog(string log)

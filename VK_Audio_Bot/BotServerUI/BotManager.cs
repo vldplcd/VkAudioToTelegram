@@ -32,10 +32,22 @@ namespace BotServerUI
                 Bot.OnCallbackQuery += BotOnCallbackQueryReceived;
                 Bot.OnInlineResultChosen += BotOnInlineReceived;
                 name = (await Bot.GetMeAsync()).Username;
+                playlists = await GetSavedInfo("pl");
+                tracks = await GetSavedInfo("tr");
             }
 
             Bot.StartReceiving();
             logevent?.Invoke($"\nBot connected: {name}");
+        }
+
+        private async Task<Dictionary<long, List<AudioInfo>>> GetSavedInfo(string sID)
+        {
+            var result = new Dictionary<long, List<AudioInfo>>();
+            var tracklist = await q.GetSavedInfo(sID);
+
+            foreach (var key in tracklist.Keys)
+                result.Add(key, tracklist[key] as List<AudioInfo>);
+            return result;
         }
 
         public void StopBot()
@@ -230,6 +242,20 @@ namespace BotServerUI
                 res.Add(item, chat.FirstName + " " + chat.LastName);
             }
             return res;
+        }
+
+        public void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Dictionary<string, object> tracklist = new Dictionary<string, object>();
+
+            foreach (var key in tracks.Keys)
+                tracklist.Add(key.ToString(), tracks[key]);
+            up.UpdateSInfo("tr", tracklist);
+            tracklist = new Dictionary<string, object>();
+            foreach (var key in playlists.Keys)
+                tracklist.Add(key.ToString(), playlists[key]);
+            up.UpdateSInfo("pl", tracklist);
+
         }
     }
 }
