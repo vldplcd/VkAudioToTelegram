@@ -7,14 +7,48 @@ using VKAudioInfoGetter.DTO.Request;
 using VKAudioInfoGetter.DTO.Response;
 using Newtonsoft.Json;
 using System;
+using System.Net;
 
 namespace VKAudioInfoGetter
 {
     public class Repository
     {
-        const string VK_Access_Token = "72ff749103be066406915619f0e28c5b2f66526139229eceab7bf23d75b1e94a4f7bfcd1c022edb014e60";
+        const string VK_Access_Token = "167a13bca761209dec5427ed6e85c7f407a3f88d37adcbbc00d246f45ce81236aed23e55094165e1d96b2";
+        const string AuthorisationTemplateUrl = "https://login.vk.com/?act=login&ip_h={0}&lg_h={1}&role=al_frame&email=89629656128&pass=Vk_audio_bot&expire=&captcha_sid=&captcha_key=&_origin=http://vk.com&q=1";
+        const string AccessTokenUrl = "https://oauth.vk.com/authorize?client_id=5763628&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=audio&response_type=token&v=5.60";
         const string TemplateUrl = "https://api.vk.com/method/audio.search?q={0}&auto_complete={1}&lyrics={2}&performer_only={3}&sort={4}&search_own={5}&offset={6}&count={7}&v=5.60&access_token={8}";
-        const string TemplateIdUrl = "https://api.vk.com/method//audio.getById?audios={0}&v=5.60&access_token={1}";
+        const string TemplateIdUrl = "https://api.vk.com/method/audio.getById?audios={0}&v=5.60&access_token={1}";
+
+        public async Task<string> GetAccessToken()
+        {
+            using (var webClient = new WebClient())
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    string page = webClient.DownloadString("https://vk.com/login");
+                    string ip_h;
+                    string lg_h;
+
+                    var st_ind = page.IndexOf("<input type=\"hidden\" name=\"ip_h\" value=\"") + "<input type=\"hidden\" name=\"ip_h\" value=\"".Length;
+                    var f_ind = page.IndexOf("\" />", st_ind);
+                    var length = f_ind - st_ind;
+
+                    ip_h = page.Substring(st_ind, length);
+                    st_ind = page.IndexOf("<input type=\"hidden\" name=\"lg_h\" value=\"") + "<input type=\"hidden\" name=\"lg_h\" value=\"".Length;
+
+                    f_ind = page.IndexOf("\" />", st_ind);
+                    length = f_ind - st_ind;
+                    lg_h = page.Substring(st_ind, length);
+
+                    StringContent content = new StringContent("");
+                    var responseMsg = await httpClient.PostAsync(string.Format(AuthorisationTemplateUrl, ip_h, lg_h), content);
+                    var authMsg = await httpClient.PostAsync("https://oauth.vk.com/authorize?client_id=5763628&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=audio&response_type=token&v=5.60", content);
+
+                    var result = await authMsg.Content.ReadAsStringAsync();
+                }
+            }
+            return access_token;
+        }
 
         public async Task<List<AudioInfo>> GetAudioList(AudioRequest request)
         {
