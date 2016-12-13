@@ -68,8 +68,8 @@ namespace VKAudioInfoGetter
 
                 StringContent content = new StringContent("");
                 var responseMsg = await httpClient.PostAsync(string.Format(TemplateUrl, vkRequest.Q, Convert.ToByte(vkRequest.Auto_complete),
-                    Convert.ToByte(vkRequest.Lyrics), Convert.ToByte(vkRequest.Performer_only), vkRequest.Sort, Convert.ToByte(vkRequest.Search_own), vkRequest.Offset,
-                    vkRequest.Count, VK_Access_Token), content);
+                                                             Convert.ToByte(vkRequest.Lyrics), Convert.ToByte(vkRequest.Performer_only), vkRequest.Sort, 
+                                                             Convert.ToByte(vkRequest.Search_own), vkRequest.Offset, vkRequest.Count, VK_Access_Token), content);
 
                 var resultString = await responseMsg.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<VKResponse>(resultString);
