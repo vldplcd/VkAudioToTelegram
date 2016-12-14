@@ -22,7 +22,6 @@ namespace SpeechRecognition
             {
                 b = br.ReadBytes((int)stream.Length);
             }
-
             return b;
         }
 
