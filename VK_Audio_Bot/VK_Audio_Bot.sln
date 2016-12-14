@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VK_Audio_Bot", "VK_Audio_Bot\VK_Audio_Bot.csproj", "{005E122B-0BF7-4378-B9FB-67B0D7EB9EE1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VK_Audio_Bot.ConsoleApp", "VK_Audio_Bot\VK_Audio_Bot.ConsoleApp.csproj", "{005E122B-0BF7-4378-B9FB-67B0D7EB9EE1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VKAudioDB", "VKAudioDB\VKAudioDB.csproj", "{C68D4731-39C4-47CF-9FD1-73007EE89CB6}"
 EndProject
@@ -11,7 +11,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotServerUI", "BotServerUI\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VKAudioInfoGetter", "VKAudioInfoGetter\VKAudioInfoGetter.csproj", "{BD6E6FDB-EDDA-4A7B-A5B6-47C8643D40BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeechRecognition", "SpeechRecognition\SpeechRecognition.csproj", "{AC7000D3-11AF-4964-9D5D-A850E636897F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VK_Audio_Bot.SpeechRecognition", "SpeechRecognition\VK_Audio_Bot.SpeechRecognition.csproj", "{AC7000D3-11AF-4964-9D5D-A850E636897F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VK_Audio_Bot.BotManager", "VK_Audio_Bot.BotManager\VK_Audio_Bot.BotManager.csproj", "{77C21FE1-485B-44C0-A897-4319E2753FC2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VK_Audio_Bot.Service", "VK_Audio_Bot.Service\VK_Audio_Bot.Service.csproj", "{E800CAB0-50EC-475C-A051-DE0F2D4DE28F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +43,14 @@ Global
 		{AC7000D3-11AF-4964-9D5D-A850E636897F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC7000D3-11AF-4964-9D5D-A850E636897F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC7000D3-11AF-4964-9D5D-A850E636897F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77C21FE1-485B-44C0-A897-4319E2753FC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77C21FE1-485B-44C0-A897-4319E2753FC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77C21FE1-485B-44C0-A897-4319E2753FC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77C21FE1-485B-44C0-A897-4319E2753FC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E800CAB0-50EC-475C-A051-DE0F2D4DE28F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E800CAB0-50EC-475C-A051-DE0F2D4DE28F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E800CAB0-50EC-475C-A051-DE0F2D4DE28F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E800CAB0-50EC-475C-A051-DE0F2D4DE28F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

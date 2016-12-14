@@ -26,6 +26,7 @@ namespace BotServerUI
 
         private void AppendLog(string log)
         {
+            
             Dispatcher.Invoke(() => log_box.AppendText(log));
         }
 

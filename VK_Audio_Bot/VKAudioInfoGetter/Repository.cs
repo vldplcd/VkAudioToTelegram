@@ -13,7 +13,7 @@ namespace VKAudioInfoGetter
 {
     public class Repository
     {
-        const string VK_Access_Token = "167a13bca761209dec5427ed6e85c7f407a3f88d37adcbbc00d246f45ce81236aed23e55094165e1d96b2";
+        const string VK_Access_Token = "2717c824b5d24f385833eaebe7e07304d3efc79fce18559015174f5042d05fbde6744343f65a692bbacc9";
         const string AuthorisationTemplateUrl = "https://login.vk.com/?act=login&ip_h={0}&lg_h={1}&role=al_frame&email=89629656128&pass=Vk_audio_bot&expire=&captcha_sid=&captcha_key=&_origin=http://vk.com&q=1";
         const string AccessTokenUrl = "https://oauth.vk.com/authorize?client_id=5763628&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=audio&response_type=token&v=5.60";
         const string TemplateUrl = "https://api.vk.com/method/audio.search?q={0}&auto_complete={1}&lyrics={2}&performer_only={3}&sort={4}&search_own={5}&offset={6}&count={7}&v=5.60&access_token={8}";
@@ -47,7 +47,7 @@ namespace VKAudioInfoGetter
                     var result = await authMsg.Content.ReadAsStringAsync();
                 }
             }
-            return access_token;
+            return "";
         }
 
         public async Task<List<AudioInfo>> GetAudioList(AudioRequest request)

@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace SpeechRecognition
+namespace VK_Audio_Bot.SpeechRecognition
 {
     public class SpeechRepository
     {
@@ -27,7 +24,7 @@ namespace SpeechRecognition
 
         private string Get16Random()
         {
-            string alfa = "0123456789ABCDEF";
+            string alfa = "0123456789abcdef";
             string result = "";
             Random rnd = new Random();
 

@@ -7,8 +7,8 @@
     <ProjectGuid>{AC7000D3-11AF-4964-9D5D-A850E636897F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SpeechRecognition</RootNamespace>
-    <AssemblyName>SpeechRecognition</AssemblyName>
+    <RootNamespace>VK_Audio_Bot.SpeechRecognition</RootNamespace>
+    <AssemblyName>VK_Audio_Bot.SpeechRecognition</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

@@ -4,14 +4,11 @@ using Telegram.Bot;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.InlineQueryResults;
-using Telegram.Bot.Types.InputMessageContents;
 using Telegram.Bot.Types.ReplyMarkups;
-using VK_Audio_Bot;
 using VKAudioDB;
-using VKAudioInfoGetter;
+using VK_Audio_Bot.BotManager;
 
-namespace telbot
+namespace VK_Audio_Bot.ConsoleApp
 {
     class Program
     {
@@ -50,11 +47,9 @@ namespace telbot
             }
             else if (message.Text.StartsWith("/t "))
             {
-                TelegramActions.Text(message, Bot);
             }
             else if (message.Text.StartsWith("/find "))
             {
-                TelegramActions.Find(message, Bot);
             }
             else
             {
