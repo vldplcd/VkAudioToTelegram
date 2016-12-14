@@ -10,12 +10,12 @@ namespace VKAudioDB
 {
     public class Queries
     {
-        public List<string> GetKey()
+        public List<string> GetKey(string akID)
         {
             using (vkAudio_Context vc = new vkAudio_Context())
             {
                 List<string> ks = new List<string>();
-                var a = vc.aks.Find(x => !string.IsNullOrEmpty(x.value)).ToList();
+                var a = vc.aks.Find(x => x.akID == akID).ToList();
                 foreach (var item in a)
                     ks.Add(item.value);
                 return ks;

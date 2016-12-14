@@ -67,6 +67,13 @@ namespace VKAudioDB
             await Users.UpdateManyAsync(filter, update);
         }
 
+        public async void UpdateAk(string akID, string value)
+        {
+            var filter = Builders<ak>.Filter.Eq((u) => u.akID, akID);
+            var update = Builders<ak>.Update.Set((u) => u.value, value);
+            await aks.UpdateManyAsync(filter, update);
+        }
+
         public async void UpdateSavedInfo (string sID, Dictionary<string, object> info)
         {
             var filter = Builders<SavedInfo>.Filter.Eq((si) => si.sID, sID);

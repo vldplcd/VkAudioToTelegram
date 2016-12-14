@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using VK_Audio_Bot.BotManager;
 
 namespace BotServerUI
 {

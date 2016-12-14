@@ -7,22 +7,22 @@ namespace VKAudioInfoGetter
 {
     public class InfoGetter
     {
-        public async Task<List<AudioInfo>> GetMusic(string requestText)
+        public async Task<List<AudioInfo>> GetMusic(string requestText, string token)
         {
             var r = new Repository();
             var request = new AudioRequest(requestText, Convert.ToBoolean(1), Convert.ToBoolean(0), Convert.ToBoolean(0), 2, Convert.ToBoolean(0), 0, 30);
 
-            var result = await r.GetAudioList(request);
+            var result = await r.GetAudioList(request, token);
             return result;
         }
 
-        public async Task<AudioInfo> GetMusicById(int id, int ownerId)
+        public async Task<AudioInfo> GetMusicById(int id, int ownerId, string token)
         {
             var r = new Repository();
             string audioIds = ownerId.ToString() + "_" + id.ToString();
             var request = new AudioIdRequest(audioIds);
 
-            var result = await r.GetAudioById(request);
+            var result = await r.GetAudioById(request, token);
             return result;
         }
     }

@@ -35,17 +35,19 @@
             // 
             this.TokenGetter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TokenGetter.Location = new System.Drawing.Point(0, 0);
-            this.TokenGetter.MinimumSize = new System.Drawing.Size(20, 20);
+            this.TokenGetter.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.TokenGetter.MinimumSize = new System.Drawing.Size(27, 25);
             this.TokenGetter.Name = "TokenGetter";
-            this.TokenGetter.Size = new System.Drawing.Size(284, 261);
+            this.TokenGetter.Size = new System.Drawing.Size(668, 424);
             this.TokenGetter.TabIndex = 0;
             // 
             // AuthorizationForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.ClientSize = new System.Drawing.Size(668, 424);
             this.Controls.Add(this.TokenGetter);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "AuthorizationForm";
             this.Text = "AuthorizationForm";
             this.Load += new System.EventHandler(this.AuthorizationForm_Load);

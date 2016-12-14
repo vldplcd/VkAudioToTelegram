@@ -45,6 +45,14 @@ namespace VKAudioDB
             }
         }
 
+        public void UpdateAk(string akID, string value)
+        {
+            using (vkAudio_Context vc = new vkAudio_Context())
+            {
+                vc.UpdateAk(akID, value);
+            }
+        }
+
         public void UpdateSInfo(string sID, Dictionary<string, object> info)
         {
             using (vkAudio_Context vc = new vkAudio_Context())

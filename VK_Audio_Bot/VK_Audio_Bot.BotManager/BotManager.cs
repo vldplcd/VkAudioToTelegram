@@ -10,6 +10,7 @@ using VKAudioInfoGetter;
 using VKAudioInfoGetter.Model;
 using Newtonsoft.Json;
 using VK_Audio_Bot.SpeechRecognition;
+using System.Windows.Forms;
 
 namespace VK_Audio_Bot.BotManager
 {
@@ -26,8 +27,11 @@ namespace VK_Audio_Bot.BotManager
         {
             if (Bot == null)
             {
+                AuthorizationForm vkAuth = new AuthorizationForm();
+                vkAuth.ShowDialog();
+                updateDB.UpdateAk("vk", vkAuth.result);
                 var q = new Queries();
-                Bot = new TelegramBotClient(q.GetKey()[0]);
+                Bot = new TelegramBotClient(q.GetKey("tg")[0]);
                 Bot.OnMessage += BotOnMessageReceived;
                 Bot.OnMessageEdited += BotOnMessageReceived;
                 Bot.OnCallbackQuery += BotOnCallbackQueryReceived;
@@ -71,7 +75,7 @@ namespace VK_Audio_Bot.BotManager
             currentIndexTr[chID] = 0;
             if (!tracks.ContainsKey(chID))
                 tracks.Add(chID, new List<AudioInfo>());
-            tracks[chID] = await infoGetter.GetMusic(request);
+            tracks[chID] = await infoGetter.GetMusic(request, dbQueries.GetKey("vk")[0]);
 
             bool isNextExists;
             var tracks_sublist = NextSublist(chID, tracks, currentIndexTr, out isNextExists);

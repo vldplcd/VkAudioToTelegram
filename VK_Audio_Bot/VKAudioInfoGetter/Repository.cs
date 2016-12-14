@@ -17,14 +17,8 @@ namespace VKAudioInfoGetter
 
         const string TemplateUrl = "https://api.vk.com/method/audio.search?q={0}&auto_complete={1}&lyrics={2}&performer_only={3}&sort={4}&search_own={5}&offset={6}&count={7}&v=5.60&access_token={8}";
         const string TemplateIdUrl = "https://api.vk.com/method/audio.getById?audios={0}&v=5.60&access_token={1}";
-
-        public string GetAccessToken()
-        {
-            //Take the token from database
-            return "";
-        }
-
-        public async Task<List<AudioInfo>> GetAudioList(AudioRequest request)
+        
+        public async Task<List<AudioInfo>> GetAudioList(AudioRequest request, string token)
         {
             using (var httpClient = new HttpClient())
             {
@@ -43,7 +37,7 @@ namespace VKAudioInfoGetter
                 StringContent content = new StringContent("");
                 var responseMsg = await httpClient.PostAsync(string.Format(TemplateUrl, vkRequest.Q, Convert.ToByte(vkRequest.Auto_complete),
                                                              Convert.ToByte(vkRequest.Lyrics), Convert.ToByte(vkRequest.Performer_only), vkRequest.Sort, 
-                                                             Convert.ToByte(vkRequest.Search_own), vkRequest.Offset, vkRequest.Count, GetAccessToken()), content);
+                                                             Convert.ToByte(vkRequest.Search_own), vkRequest.Offset, vkRequest.Count, token), content);
 
                 var resultString = await responseMsg.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<VKResponse>(resultString);
@@ -62,7 +56,7 @@ namespace VKAudioInfoGetter
             }
         }
 
-        public async Task<AudioInfo> GetAudioById(AudioIdRequest request)
+        public async Task<AudioInfo> GetAudioById(AudioIdRequest request, string token)
         {
             using (var httpClient = new HttpClient())
             {
@@ -72,7 +66,7 @@ namespace VKAudioInfoGetter
                 };
 
                 StringContent content = new StringContent("");
-                var responseMsg = await httpClient.PostAsync(string.Format(TemplateIdUrl, vkIdRequest.Audios, GetAccessToken()), content);
+                var responseMsg = await httpClient.PostAsync(string.Format(TemplateIdUrl, vkIdRequest.Audios, token), content);
 
                 var resultString = await responseMsg.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<VKResponse>(resultString);
