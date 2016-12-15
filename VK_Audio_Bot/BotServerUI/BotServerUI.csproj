@@ -46,7 +46,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -111,14 +110,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\VKAudioDB\VKAudioDB.csproj">
-      <Project>{c68d4731-39c4-47cf-9fd1-73007ee89cb6}</Project>
-      <Name>VKAudioDB</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\VKAudioInfoGetter\VKAudioInfoGetter.csproj">
-      <Project>{bd6e6fdb-edda-4a7b-a5b6-47c8643d40ba}</Project>
-      <Name>VKAudioInfoGetter</Name>
-    </ProjectReference>
     <ProjectReference Include="..\VK_Audio_Bot.BotManager\VK_Audio_Bot.BotManager.csproj">
       <Project>{77c21fe1-485b-44c0-a897-4319e2753fc2}</Project>
       <Name>VK_Audio_Bot.BotManager</Name>

@@ -10,7 +10,7 @@ using VKAudioInfoGetter;
 using VKAudioInfoGetter.Model;
 using Newtonsoft.Json;
 using VK_Audio_Bot.SpeechRecognition;
-using System.Windows.Forms;
+using System.Threading;
 
 namespace VK_Audio_Bot.BotManager
 {
@@ -27,17 +27,26 @@ namespace VK_Audio_Bot.BotManager
         {
             if (Bot == null)
             {
-                AuthorizationForm vkAuth = new AuthorizationForm();
-                vkAuth.ShowDialog();
-                updateDB.UpdateAk("vk", vkAuth.result);
-                var q = new Queries();
-                Bot = new TelegramBotClient(q.GetKey("tg")[0]);
+                //Process.Start("Chrome", "https://oauth.vk.com/authorize?client_id=5763628&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=audio&response_type=token&v=5.60");
+                var thread = new Thread(() =>
+                {
+                    AuthorizationForm vkAuth = new AuthorizationForm();
+                    vkAuth.ShowDialog();
+                    updateDB.UpdateAk("vk", vkAuth.result);
+                });
+                thread.SetApartmentState(ApartmentState.STA);
+                thread.Start();
+                Bot = new TelegramBotClient(dbQueries.GetKey("tg")[0]);
                 Bot.OnMessage += BotOnMessageReceived;
                 Bot.OnMessageEdited += BotOnMessageReceived;
                 Bot.OnCallbackQuery += BotOnCallbackQueryReceived;
                 Bot.OnInlineResultChosen += BotOnInlineReceived;
-                playlists = await GetSavedInfo("pl");
-                tracks = await GetSavedInfo("tr");
+                var thread_sinf = new Thread(async () =>
+                {
+                    playlists = await GetSavedInfo("pl");
+                    tracks = await GetSavedInfo("tr");
+                });
+                thread_sinf.Start();                
             }
             Bot.StartReceiving();
             logevent?.Invoke($"\nBot connected");
@@ -97,7 +106,7 @@ namespace VK_Audio_Bot.BotManager
                     string result;
                     try
                     {
-                        result = await sr.Result((await Bot.GetFileAsync(message.Voice.FileId)).FileStream);
+                         result = await sr.Result((await Bot.GetFileAsync(message.Voice.FileId)).FileStream, dbQueries.GetKey("ya")[0]);
                     }
                     catch (Exception ex) { await Bot.SendTextMessageAsync(message.Chat.Id, $"{ex.Message}"); return; }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -9,7 +10,7 @@ namespace VK_Audio_Bot.SpeechRecognition
 {
     public class SpeechRepository
     {
-        string requestUrl = "https://asr.yandex.net/asr_xml?uuid={0}&key=94bee9ae-8156-4c30-a25e-539630603a92&topic=queries";
+        string requestUrl = "https://asr.yandex.net/asr_xml?uuid={0}&key={1}&topic=queries";
 
         private byte[] StreamToBytes(Stream stream)
         {
@@ -39,7 +40,7 @@ namespace VK_Audio_Bot.SpeechRecognition
             return result;
         }
 
-        public async Task<string> Result(Stream stream)
+        public async Task<string> Result(Stream stream, string api_key)
         {
             string result;
 
@@ -47,15 +48,12 @@ namespace VK_Audio_Bot.SpeechRecognition
             {
                 using (var client = new HttpClient())
                 {
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("audio/ogg"));
-
                     var content = new ByteArrayContent(StreamToBytes(fs));
-                    var request = new HttpRequestMessage(HttpMethod.Post, "");
-
+                    var request = new HttpRequestMessage(HttpMethod.Post, string.Format(requestUrl, Get16Random(), api_key));                    
                     request.Content = content;
-                    request.Content.Headers.Add("Content-Type", "audio/ogg;codecs=opus");
+                    request.Content.Headers.Add("Content-Type", "audio/ogg; codecs=opus");
 
-                    var responseMsg = await client.PostAsync(string.Format(requestUrl, Get16Random()), content);
+                    var responseMsg = await client.SendAsync(request);
                     var responseStr = responseMsg.Content.ReadAsStringAsync();
 
                     if (responseStr.Exception == null)

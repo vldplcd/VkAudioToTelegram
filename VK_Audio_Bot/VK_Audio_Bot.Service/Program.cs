@@ -12,14 +12,22 @@ namespace VK_Audio_Bot.Service
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        static void Main()
+        static void Main(string[] args)
         {
-            ServiceBase[] ServicesToRun;
-            ServicesToRun = new ServiceBase[]
-            {
-                new BotService()
-            };
-            ServiceBase.Run(ServicesToRun);
+            //if (Environment.UserInteractive)
+            //{
+            //    BotService service1 = new BotService();
+            //    service1.TestStartupAndStop(args);
+            //}
+            //else
+            //{
+                ServiceBase[] ServicesToRun;
+                ServicesToRun = new ServiceBase[]
+                {
+                    new BotService()
+                };
+                ServiceBase.Run(ServicesToRun);
+            //}
         }
     }
 }

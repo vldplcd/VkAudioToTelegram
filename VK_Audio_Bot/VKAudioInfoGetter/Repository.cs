@@ -7,7 +7,6 @@ using VKAudioInfoGetter.DTO.Request;
 using VKAudioInfoGetter.DTO.Response;
 using Newtonsoft.Json;
 using System;
-using System.Net;
 
 namespace VKAudioInfoGetter
 {

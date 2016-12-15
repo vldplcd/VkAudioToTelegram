@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -18,6 +17,8 @@ namespace BotServerUI
         public MainWindow()
         {
             InitializeComponent();
+            btn_start_bot.IsEnabled = true;
+            btn_stop_bot.IsEnabled = false;
             botm = new BotManager();
             Dispatcher.Invoke(() => log_box.AppendText(""));
             botm.logevent += AppendLog;
@@ -33,18 +34,22 @@ namespace BotServerUI
 
         private async void btn_start_bot_Click(object sender, RoutedEventArgs e)
         {
+            btn_stop_bot.IsEnabled = true;
+            btn_start_bot.IsEnabled = false;
             await botm.StartBot();
             Dictionary<long, string> usernames = new Dictionary<long, string>();
             usernames = await botm.Usernames();
-
             Binding cmb_us_binding = new Binding();
             cmb_us_binding.Source = usernames;
-            cmb_users.SetBinding(ItemsControl.ItemsSourceProperty, cmb_us_binding);            
+            cmb_users.SetBinding(ItemsControl.ItemsSourceProperty, cmb_us_binding);                   
         }
 
         private void btn_stop_bot_Click(object sender, RoutedEventArgs e)
         {
+            btn_stop_bot.IsEnabled = false;
+            btn_start_bot.IsEnabled = true;
             botm.StopBot();
+
         }
 
         private async void btn_send_Click(object sender, RoutedEventArgs e)
@@ -82,6 +87,11 @@ namespace BotServerUI
                     break;
             }
             txb_messege.Text = "";
+        }
+
+        private void cmb_users_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }
