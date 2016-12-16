@@ -22,6 +22,7 @@ namespace BotServerUI
             botm = new BotManager();
             Dispatcher.Invoke(() => log_box.AppendText(""));
             botm.logevent += AppendLog;
+            botm.SetGetter(true);
             txb_messege.Text = "";
             Closing += botm.OnClosing;
         }
@@ -92,6 +93,16 @@ namespace BotServerUI
         private void cmb_users_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        private void rbVK_Checked(object sender, RoutedEventArgs e)
+        {
+            botm.SetGetter(true);
+        }
+
+        private void rbMp3CC_Checked(object sender, RoutedEventArgs e)
+        {
+            botm.SetGetter(false);
         }
     }
 }

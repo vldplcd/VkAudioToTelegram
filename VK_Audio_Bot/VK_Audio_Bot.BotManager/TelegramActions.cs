@@ -94,30 +94,39 @@ namespace VK_Audio_Bot.BotManager
                 }
                 else
                 {
-                    WebRequest request = WebRequest.Create(track.Url);
-                    using (WebResponse response = request.GetResponse())
-                    {
-                        using (Stream responseStream = response.GetResponseStream())
-                        {
-                            try
-                            {
-                                var audio_m = await Bot.SendAudioAsync(chID, new FileToSend("track.mp3", responseStream), track.Duration,
-                            track.Title, track.Artist, replyMarkup: keyboard);
-                                track.isUploaded = true;
-                                track.FileId = audio_m.Audio.FileId;
-                            }
-                            catch
-                            {
+                    //GetTrack(track, Bot, chID, keyboard);
 
-                            }
-                        }
-                    }
+                    var audio_m = await Bot.SendAudioAsync(chID, track.Url, track.Duration, track.Artist, track.Title, replyMarkup: keyboard);
+                    track.isUploaded = true;
+                    track.FileId = audio_m.Audio.FileId;
                 }
 
             }
             else
             {
                 await Bot.SendTextMessageAsync(chID, "Try to use /find again and then choose necessary track");
+            }
+        }
+
+        static private async void GetTrack(AudioInfo track, TelegramBotClient Bot, long chID, InlineKeyboardMarkup keyboard)
+        {
+            WebRequest request = WebRequest.Create(track.Url);
+            using (WebResponse response = request.GetResponse())
+            {
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    try
+                    {
+                        var audio_m = await Bot.SendAudioAsync(chID, new FileToSend($"{track.Title} - {track.Artist}", responseStream), track.Duration,
+                    track.Title, track.Artist, replyMarkup: keyboard);
+                        track.isUploaded = true;
+                        track.FileId = audio_m.Audio.FileId;
+                    }
+                    catch
+                    {
+
+                    }
+                }
             }
         }
 

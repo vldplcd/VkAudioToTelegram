@@ -64,10 +64,13 @@
     <Compile Include="DTO\Response\Item.cs" />
     <Compile Include="DTO\Response\TrackInfo.cs" />
     <Compile Include="DTO\Response\VKResponse.cs" />
+    <Compile Include="GetterFactory.cs" />
+    <Compile Include="IInfoGetter.cs" />
     <Compile Include="InfoGetter.cs" />
     <Compile Include="Model\AudioIdRequest.cs" />
     <Compile Include="Model\AudioInfo.cs" />
     <Compile Include="Model\AudioRequest.cs" />
+    <Compile Include="Mp3CCInfoGetter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
   </ItemGroup>

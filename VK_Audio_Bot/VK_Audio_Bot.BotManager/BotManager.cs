@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types.Enums;
@@ -11,6 +12,7 @@ using VKAudioInfoGetter.Model;
 using Newtonsoft.Json;
 using VK_Audio_Bot.SpeechRecognition;
 using System.Threading;
+
 
 namespace VK_Audio_Bot.BotManager
 {
@@ -27,7 +29,6 @@ namespace VK_Audio_Bot.BotManager
         {
             if (Bot == null)
             {
-                //Process.Start("Chrome", "https://oauth.vk.com/authorize?client_id=5763628&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=audio&response_type=token&v=5.60");
                 var thread = new Thread(() =>
                 {
                     AuthorizationForm vkAuth = new AuthorizationForm();
@@ -46,19 +47,51 @@ namespace VK_Audio_Bot.BotManager
                     playlists = await GetSavedInfo("pl");
                     tracks = await GetSavedInfo("tr");
                 });
-                thread_sinf.Start();                
+                thread_sinf.Start();
+                infoGetter.getApiKeyEvent += (akID) => dbQueries.GetKey(akID)[0];
             }
             Bot.StartReceiving();
-            logevent?.Invoke($"\nBot connected");
+            logevent?.Invoke($"\nBot connected");            
         }
 
         private async Task<Dictionary<long, List<AudioInfo>>> GetSavedInfo(string sID)
         {
             var result = new Dictionary<long, List<AudioInfo>>();
-            var tracklist = await dbQueries.GetSavedInfo(sID);
-            if (tracklist.Count != 0)
-                foreach (var key in tracklist.Keys)
-                    result.Add(key, tracklist[key] as List<AudioInfo>);
+            try
+            {
+                var tracklist = await dbQueries.GetSavedInfo(sID);
+                if (tracklist.Count != 0)
+                    foreach (var key in tracklist.Keys)
+                    {
+                        result.Add(key, new List<AudioInfo>());
+                        var type = tracklist[key].GetType();
+                        var t = Convert.ChangeType(tracklist[key], type);
+                        var mehmeh = t as Dictionary<string, object>;
+                        var desDictList = mehmeh["_v"] as List<object>;
+                        
+                        foreach(var innerDict in desDictList)
+                        {
+                            var objDict = innerDict as Dictionary<string, object>;
+                                result[key].Add(new AudioInfo
+                                {
+                                    Id = (int)objDict["_id"],
+                                    Artist = (string)objDict["Artist"],
+                                    Title = (string)objDict["Title"],
+                                    Duration = (int)objDict["Duration"],
+                                    Url = (string)objDict["Url"],
+                                    isUploaded = (bool)objDict["isUploaded"],
+                                    FileId = (string)objDict["FileId"]
+
+                                });
+                        }
+                    }
+                        
+                logevent($"\nPrevious session {sID} loaded");
+            }
+            catch(Exception ex)
+            {
+                logevent($"\nFailed to load previous session: {ex.Message}");
+            }
             return result;
         }
 
@@ -70,7 +103,15 @@ namespace VK_Audio_Bot.BotManager
 
         UpdateDB updateDB = new UpdateDB();
         Queries dbQueries = new Queries();
-        InfoGetter infoGetter = new InfoGetter();
+
+        IInfoGetter infoGetter;
+        public void SetGetter(bool isVk)
+        {
+            if (isVk)
+                infoGetter = GetterFactory.DefaultVk();
+            else
+                infoGetter = GetterFactory.DefaultMp3CC();
+        }
 
         Dictionary<long, List<AudioInfo>> tracks = new Dictionary<long, List<AudioInfo>>();
         Dictionary<long, int> currentIndexTr = new Dictionary<long, int>();
@@ -84,7 +125,7 @@ namespace VK_Audio_Bot.BotManager
             currentIndexTr[chID] = 0;
             if (!tracks.ContainsKey(chID))
                 tracks.Add(chID, new List<AudioInfo>());
-            tracks[chID] = await infoGetter.GetMusic(request, dbQueries.GetKey("vk")[0]);
+            tracks[chID] = await infoGetter.GetMusic(request);
 
             bool isNextExists;
             var tracks_sublist = NextSublist(chID, tracks, currentIndexTr, out isNextExists);
@@ -279,28 +320,38 @@ namespace VK_Audio_Bot.BotManager
 
         public void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Dictionary<string, object> tracklist = new Dictionary<string, object>();
+            var tracklist = new Dictionary<string, object>();
 
             foreach (var key in tracks.Keys)
+            {
                 tracklist.Add(key.ToString(), tracks[key]);
+            }
+                
             updateDB.UpdateSInfo("tr", tracklist);
             tracklist = new Dictionary<string, object>();
             foreach (var key in playlists.Keys)
-                tracklist.Add(key.ToString(), playlists[key]);
+            {
+                tracklist.Add(key.ToString(), tracks[key]);
+            }
             updateDB.UpdateSInfo("pl", tracklist);
 
         }
 
         public void OnClosing()
         {
-            Dictionary<string, object> tracklist = new Dictionary<string, object>();
+            var tracklist = new Dictionary<string, object>();
 
             foreach (var key in tracks.Keys)
+            {
                 tracklist.Add(key.ToString(), tracks[key]);
+            }
+
             updateDB.UpdateSInfo("tr", tracklist);
             tracklist = new Dictionary<string, object>();
             foreach (var key in playlists.Keys)
-                tracklist.Add(key.ToString(), playlists[key]);
+            {
+                tracklist.Add(key.ToString(), tracks[key]);
+            }
             updateDB.UpdateSInfo("pl", tracklist);
 
         }

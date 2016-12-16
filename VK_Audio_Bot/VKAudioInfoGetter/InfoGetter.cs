@@ -5,10 +5,12 @@ using VKAudioInfoGetter.Model;
 
 namespace VKAudioInfoGetter
 {
-    public class InfoGetter
+    public class InfoGetter : IInfoGetter
     {
-        public async Task<List<AudioInfo>> GetMusic(string requestText, string token)
+        public event GetApiKey getApiKeyEvent;
+        public async Task<List<AudioInfo>> GetMusic(string requestText)
         {
+            string token = getApiKeyEvent?.Invoke("vk");
             var r = new Repository();
             var request = new AudioRequest(requestText, Convert.ToBoolean(1), Convert.ToBoolean(0), Convert.ToBoolean(0), 2, Convert.ToBoolean(0), 0, 30);
 
