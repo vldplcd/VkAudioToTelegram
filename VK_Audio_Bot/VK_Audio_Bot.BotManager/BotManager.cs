@@ -205,7 +205,7 @@ namespace VK_Audio_Bot.BotManager
                 }
                 else
                 {
-                    var usage = "Usage:\n/find  - find track with its name\n/playlist - see your playlist"+
+                    var usage = "Usage:\n/find Track name - find track with its name\n/playlist - see your playlist"+
                     "\nSend a voice message to use voice search";
 
                     await Bot.SendTextMessageAsync(message.Chat.Id, usage,

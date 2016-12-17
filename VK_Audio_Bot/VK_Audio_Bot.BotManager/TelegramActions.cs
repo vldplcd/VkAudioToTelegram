@@ -63,7 +63,9 @@ namespace VK_Audio_Bot.BotManager
 
         static public async void Start(Message message, TelegramBotClient Bot)
         {
-            var greeting = $"Hello, {message.Chat.FirstName}!\nThis is VK audio bot. As you will see, it provides you an opportunity to listen to music from vk.com right here.\nType /find Track_name to find track" +
+            var greeting = $"Hello, {message.Chat.FirstName}!\nThis is VK audio bot. As you will see, it provides you an opportunity to listen to music from vk.com right here."+
+                "\n(not from vk actually, as their api was closed)"+
+                "\nType /find Track name to find track" +
                 "\nType /playlist to see your playlist\nSend voice message to use voice search";
             await Bot.SendTextMessageAsync(message.Chat.Id, greeting,
                 replyMarkup: new ReplyKeyboardHide());
