@@ -134,11 +134,18 @@ namespace VK_Audio_Bot.BotManager
             currentIndexTr[chID] = 0;
             if (!tracks.ContainsKey(chID))
                 tracks.Add(chID, new List<AudioInfo>());
-            tracks[chID] = await infoGetter.GetMusic(request);
-
-            bool isNextExists;
-            var tracks_sublist = NextSublist(chID, tracks, currentIndexTr, out isNextExists);
-            TelegramActions.Find(chID, Bot, tracks_sublist, isNextExists, false);
+            try
+            {
+                tracks[chID] = await infoGetter.GetMusic(request);
+                bool isNextExists;
+                var tracks_sublist = NextSublist(chID, tracks, currentIndexTr, out isNextExists);
+                TelegramActions.Find(chID, Bot, tracks_sublist, isNextExists, false);
+            }
+            catch(Exception ex)
+            {
+                logevent($"\nFailed to find {request} for {chID}: {ex.Message}");
+                await Bot.SendTextMessageAsync(chID, "It seems that I can't find any track with your request. Try something else.");
+            }
         }
                 
         private void BotOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
