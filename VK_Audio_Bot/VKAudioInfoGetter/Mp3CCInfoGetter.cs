@@ -34,7 +34,7 @@ namespace VKAudioInfoGetter
                         Artist = li.SelectSingleNode("h2").SelectSingleNode("b").SelectSingleNode("a").InnerText.ToString().Replace("&quot;", "\""),
                         Title = li.SelectSingleNode("h2").SelectSingleNode("em").SelectSingleNode("a").InnerText.ToString().Replace("&quot;", "\""),
                         Id = int.Parse(li.Attributes["data-id"].Value),
-                        Url = li.Attributes["data-url_song"].Value,
+                        Url = li.Attributes["data-mp3"].Value,
                         Duration = int.Parse(li.Attributes["data-duration"].Value) / 1000,
                     });
                 }

@@ -60,6 +60,9 @@ namespace VK_Audio_Bot.BotManager
             logevent?.Invoke($"\nBot connected");            
         }
 
+        /**We know that the following method seems wierd and as if it were written in unconsious state
+         * but really it solves a problem of iablitity to unbox object in a right class. When we first 
+         * implemented it, there was no such promlem but then it appeared somehow**/
         private async Task<Dictionary<long, List<AudioInfo>>> GetSavedInfo(string sID)
         {
             var result = new Dictionary<long, List<AudioInfo>>();
