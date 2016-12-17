@@ -62,7 +62,9 @@ namespace VK_Audio_Bot.BotManager
 
         static public async void Start(Message message, TelegramBotClient Bot)
         {
-            var greeting = $"Hello, {message.Chat.FirstName}!\nThis is VK audio bot. As you will see, it provides you an opportunity to listen to music from vk.com right here.\nType /find Track_name to find track" +
+            var greeting = $"Hello, {message.Chat.FirstName}!\nThis is VK audio bot. As you will see, it provides you an opportunity to listen to music from vk.com right here."+
+                "\n(not from vk actually, as their api was closed)"+
+                "\nType /find Track name to find track" +
                 "\nType /playlist to see your playlist\nSend voice message to use voice search";
             await Bot.SendTextMessageAsync(message.Chat.Id, greeting,
                 replyMarkup: new ReplyKeyboardHide());
@@ -94,10 +96,13 @@ namespace VK_Audio_Bot.BotManager
                 else
                 {
                     //GetTrack(track, Bot, chID, keyboard);
-
-                    var audio_m = await Bot.SendAudioAsync(chID, track.Url, track.Duration, track.Artist, track.Title, replyMarkup: keyboard);
-                    track.isUploaded = true;
-                    track.FileId = audio_m.Audio.FileId;
+                    try
+                    {
+                        var audio_m = await Bot.SendAudioAsync(chID, track.Url, track.Duration, track.Artist, track.Title, replyMarkup: keyboard);
+                        track.isUploaded = true;
+                        track.FileId = audio_m.Audio.FileId;
+                    }
+                    catch { await Bot.SendTextMessageAsync(chID, "I can't download this track, sorry"); }
                 }
 
             }
