@@ -29,14 +29,18 @@ namespace VK_Audio_Bot.BotManager
         {
             if (Bot == null)
             {
-                var thread = new Thread(() =>
+                if (Environment.UserInteractive)
                 {
-                    AuthorizationForm vkAuth = new AuthorizationForm();
-                    vkAuth.ShowDialog();
-                    updateDB.UpdateAk("vk", vkAuth.result);
-                });
-                thread.SetApartmentState(ApartmentState.STA);
-                thread.Start();
+                    var thread = new Thread(() =>
+                    {
+                        AuthorizationForm vkAuth = new AuthorizationForm();
+                        vkAuth.ShowDialog();
+                        updateDB.UpdateAk("vk", vkAuth.result);
+                    });
+                    thread.SetApartmentState(ApartmentState.STA);
+                    thread.Start();
+                }
+                
                 Bot = new TelegramBotClient(dbQueries.GetKey("tg")[0]);
                 Bot.OnMessage += BotOnMessageReceived;
                 Bot.OnMessageEdited += BotOnMessageReceived;
@@ -48,6 +52,8 @@ namespace VK_Audio_Bot.BotManager
                     tracks = await GetSavedInfo("tr");
                 });
                 thread_sinf.Start();
+                if (infoGetter == null)
+                    infoGetter = GetterFactory.DefaultMp3CC();
                 infoGetter.getApiKeyEvent += (akID) => dbQueries.GetKey(akID)[0];
             }
             Bot.StartReceiving();
@@ -160,7 +166,7 @@ namespace VK_Audio_Bot.BotManager
 
                 if (message.Text.StartsWith("/start"))
                 {
-                    updateDB.InsertUser(message.Chat.Id);
+                    updateDB.InsertUser(message.Chat.Id, new List<int>());
                     userAddedEvent?.Invoke();
                     TelegramActions.Start(message, Bot);
                 }
@@ -247,6 +253,15 @@ namespace VK_Audio_Bot.BotManager
                     }
 
                 }
+
+                else if (callbackQueryEventArgs.CallbackQuery.Data.StartsWith("d") &&
+                            int.TryParse(callbackQueryEventArgs.CallbackQuery.Data.Substring(1), out trID))
+                {
+                    updateDB.DeleteUserTrack(chID, trID);
+                    await Bot.AnswerCallbackQueryAsync(callbackQueryEventArgs.CallbackQuery.Id,
+                        $"Deleted from playlist");
+                }
+
                 else if (callbackQueryEventArgs.CallbackQuery.Data.StartsWith("p") &&
                         int.TryParse(callbackQueryEventArgs.CallbackQuery.Data.Substring(1), out trID))
                 {

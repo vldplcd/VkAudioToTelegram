@@ -48,39 +48,6 @@ namespace VKAudioDB
             get { return database.GetCollection<SavedInfo>("savedInfo"); }
         }
 
-        public async void InsertUser(User user)
-        {
-            if(Users.Find(u => u.chatID == user.chatID).Count() == 0)
-                await Users.InsertOneAsync(user);
-        }
-
-        public async void InsertTrack(Track track)
-        {
-            if (Tracks.Find(t => t.dbID == track.dbID).Count() == 0)
-                await Tracks.InsertOneAsync(track);
-        }
-
-        public async void UpdateUser(long chatID, List<int> tracks)
-        {
-            var filter = Builders<User>.Filter.Eq((u) => u.chatID, chatID);
-            var update = Builders<User>.Update.Set((u) => u.tracks, tracks);
-            await Users.UpdateManyAsync(filter, update);
-        }
-
-        public async void UpdateAk(string akID, string value)
-        {
-            var filter = Builders<ak>.Filter.Eq((u) => u.akID, akID);
-            var update = Builders<ak>.Update.Set((u) => u.value, value);
-            await aks.UpdateManyAsync(filter, update);
-        }
-
-        public async void UpdateSavedInfo (string sID, Dictionary<string, object> info)
-        {
-            var filter = Builders<SavedInfo>.Filter.Eq((si) => si.sID, sID);
-            var update = Builders<SavedInfo>.Update.Set((si) => si.Info, info);
-            await SavedInfo.UpdateOneAsync(filter, update);
-        }
-
         public void Dispose()
         {
             Dispose(true);

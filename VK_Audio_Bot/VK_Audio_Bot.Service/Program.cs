@@ -14,20 +14,20 @@ namespace VK_Audio_Bot.Service
         /// </summary>
         static void Main(string[] args)
         {
-            //if (Environment.UserInteractive)
-            //{
-            //    BotService service1 = new BotService();
-            //    service1.TestStartupAndStop(args);
-            //}
-            //else
-            //{
+            if (Environment.UserInteractive)
+            {
+                BotService service1 = new BotService();
+                service1.TestStartupAndStop(args);
+            }
+            else
+            {
                 ServiceBase[] ServicesToRun;
                 ServicesToRun = new ServiceBase[]
                 {
                     new BotService()
                 };
                 ServiceBase.Run(ServicesToRun);
-            //}
+            }
         }
     }
 }
