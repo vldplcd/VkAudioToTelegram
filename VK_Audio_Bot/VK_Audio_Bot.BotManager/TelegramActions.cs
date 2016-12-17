@@ -95,10 +95,13 @@ namespace VK_Audio_Bot.BotManager
                 else
                 {
                     //GetTrack(track, Bot, chID, keyboard);
-
-                    var audio_m = await Bot.SendAudioAsync(chID, track.Url, track.Duration, track.Artist, track.Title, replyMarkup: keyboard);
-                    track.isUploaded = true;
-                    track.FileId = audio_m.Audio.FileId;
+                    try
+                    {
+                        var audio_m = await Bot.SendAudioAsync(chID, track.Url, track.Duration, track.Artist, track.Title, replyMarkup: keyboard);
+                        track.isUploaded = true;
+                        track.FileId = audio_m.Audio.FileId;
+                    }
+                    catch { await Bot.SendTextMessageAsync(chID, "I can't download this track, sorry"); }
                 }
 
             }
