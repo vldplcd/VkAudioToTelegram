@@ -8,6 +8,7 @@ namespace VKAudioInfoGetter
     public class InfoGetter : IInfoGetter
     {
         public event GetApiKey getApiKeyEvent;
+
         public async Task<List<AudioInfo>> GetMusic(string requestText)
         {
             string token = getApiKeyEvent?.Invoke("vk");
