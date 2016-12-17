@@ -180,9 +180,9 @@ namespace VK_Audio_Bot.BotManager
                     userAddedEvent?.Invoke();
                     TelegramActions.Start(message, Bot);
                 }
-                else if (message.Text.StartsWith("/find "))
+                else if (message.Text.ToLower().StartsWith("/find "))
                 {
-                    await FindProcess(chID, message.Text.Substring(6));
+                    await FindProcess(chID, message.Text.Substring(6).ToLower());
                 }
                 else if (message.Text.StartsWith("/playlist"))
                 {
