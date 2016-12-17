@@ -25,19 +25,19 @@ namespace VKAudioInfoGetter
                 var doc = new HtmlAgilityPack.HtmlDocument();
                 doc.LoadHtml(htmlResult);
 
-                foreach (var li in doc.DocumentNode.SelectNodes("//li"))
-                    foreach (var b in doc.DocumentNode.SelectNodes("//li/b/a"))
-                        foreach (var em in doc.DocumentNode.SelectNodes("//li/em/a"))
-                        {
-                            result.Add(new AudioInfo
-                            {
-                                Artist = b.InnerText,
-                                Title = em.InnerText,
-                                Id = int.Parse(li.Attributes["data-id"].Value),
-                                Url = li.Attributes["data-url_song"].Value,
-                                Duration = int.Parse(li.Attributes["duration"].Value) / 1000,
-                            });
-                        }
+                var music = doc.DocumentNode.SelectSingleNode("//ul[@class='playlist']");
+
+                foreach (var li in music.SelectNodes("//li[@class='track']"))
+                {
+                    result.Add(new AudioInfo
+                    {
+                        Artist = li.SelectSingleNode("h2").SelectSingleNode("b").SelectSingleNode("a").InnerText.ToString().Replace("&quot;", "\""),
+                        Title = li.SelectSingleNode("h2").SelectSingleNode("em").SelectSingleNode("a").InnerText.ToString().Replace("&quot;", "\""),
+                        Id = int.Parse(li.Attributes["data-id"].Value),
+                        Url = li.Attributes["data-url_song"].Value,
+                        Duration = int.Parse(li.Attributes["data-duration"].Value) / 1000,
+                    });
+                }
                 return result;
             }
         }
