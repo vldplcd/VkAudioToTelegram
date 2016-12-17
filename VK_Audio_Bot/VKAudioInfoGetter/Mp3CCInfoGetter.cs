@@ -14,37 +14,33 @@ namespace VKAudioInfoGetter
         public event GetApiKey getApiKeyEvent;
 
         public async Task<List<AudioInfo>> GetMusic(string requestText)
-        { 
+        {
             requestText = requestText.Trim().Replace(' ', '+');
             var result = new List<AudioInfo>();
-            using (WebClient wc = new WebClient())
+
+            using (WebClient webClient = new WebClient())
             {
-                wc.Encoding = Encoding.UTF8;
-                var htmlResult = wc.DownloadString($"http://mp3.cc/search/f/{requestText}/");
-                Regex trackUrlEx = new Regex(".*data-id=\"(.*)\" data-mp3=\"(.*.mp3)\" data-url_song=\".*\" data-duration=\"(.*)\".*");
-                Regex trackArtistEx = new Regex(".*<b><a href=\".*\">(.*)</a></b>");
-                Regex trackTitleEx = new Regex(".*<em><a href=\".*\">(.*)</a></em>.*");
-                var trackUrl = trackUrlEx.Match(htmlResult);
-                var trackArtist = trackArtistEx.Match(htmlResult);
-                var trackTitle = trackTitleEx.Match(htmlResult);
-                while(trackTitle.Success && trackArtist.Success && trackUrl.Success)
-                {
-                    result.Add(new AudioInfo
-                    {
-                        Artist = trackArtist.Groups[1].Value.Replace("&quot;", "\""),
-                        Title = trackTitle.Groups[1].Value.Replace("&quot;","\""),
-                        Url = trackUrl.Groups[2].Value,
-                        Id = int.Parse(trackUrl.Groups[1].Value),
-                        Duration = int.Parse(trackUrl.Groups[3].Value)/1000
-                    });
+                webClient.Encoding = Encoding.UTF8;
+                var htmlResult = webClient.DownloadString($"http://mp3.cc/search/f/{requestText}/");
+                var doc = new HtmlAgilityPack.HtmlDocument();
+                doc.LoadHtml(htmlResult);
 
-                    trackUrl = trackUrl.NextMatch();
-                    trackTitle = trackTitle.NextMatch();
-                    trackArtist = trackArtist.NextMatch();
-                }
+                foreach (var li in doc.DocumentNode.SelectNodes("//li"))
+                    foreach (var b in doc.DocumentNode.SelectNodes("//li/b/a"))
+                        foreach (var em in doc.DocumentNode.SelectNodes("//li/em/a"))
+                        {
+                            result.Add(new AudioInfo
+                            {
+                                Artist = b.InnerText,
+                                Title = em.InnerText,
+                                Id = int.Parse(li.Attributes["data-id"].Value),
+                                Url = li.Attributes["data-url_song"].Value,
+                                Duration = int.Parse(li.Attributes["duration"].Value) / 1000,
+                            });
+                        }
                 return result;
-
             }
         }
     }
 }
+
