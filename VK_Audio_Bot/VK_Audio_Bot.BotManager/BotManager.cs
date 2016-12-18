@@ -12,7 +12,7 @@ using VKAudioInfoGetter.Model;
 using Newtonsoft.Json;
 using VK_Audio_Bot.SpeechRecognition;
 using System.Threading;
-
+using System.IO;
 
 namespace VK_Audio_Bot.BotManager
 {
@@ -29,6 +29,7 @@ namespace VK_Audio_Bot.BotManager
         {
             if (Bot == null)
             {
+                logevent += WriteLogFile;
                 if (Environment.UserInteractive)
                 {
                     var thread = new Thread(() =>
@@ -228,6 +229,7 @@ namespace VK_Audio_Bot.BotManager
             {
                 int trID;
                 var chID = callbackQueryEventArgs.CallbackQuery.From.Id;
+                logevent?.Invoke($"\nCallback query {callbackQueryEventArgs.CallbackQuery.Data} was recieved from {chID}");
                 if (int.TryParse(callbackQueryEventArgs.CallbackQuery.Data, out trID))
                 {
                     try
@@ -235,7 +237,9 @@ namespace VK_Audio_Bot.BotManager
                         await Bot.AnswerCallbackQueryAsync(callbackQueryEventArgs.CallbackQuery.Id,
                         $"Wait a little, pls");
                         TelegramActions.SendTrack(chID, trID, tracks[chID], Bot, false);
-                        
+                        logevent?.Invoke($"\nTrack {trID} was sent to {chID}");
+
+
                     }
                     catch (Exception ex)
                     {
@@ -255,12 +259,13 @@ namespace VK_Audio_Bot.BotManager
                         updateDB.UpdateUser(chID, trID);
                         await Bot.AnswerCallbackQueryAsync(callbackQueryEventArgs.CallbackQuery.Id,
                             $"Saved {track.Title} to playlist");
+                        logevent?.Invoke($"\nTrack {trID} was saved to {chID} playlist");
                     }
                     catch (Exception ex)
                     {
                         await Bot.SendTextMessageAsync(callbackQueryEventArgs.CallbackQuery.Id,
                         $"Failed. You cannot save any track from previous requests, sry(9((\nTry find it again");
-                        logevent?.Invoke($"\n{ex.Message}");
+                        logevent?.Invoke($"\n{ex.Message} chatID: {chID}");
                     }
 
                 }
@@ -271,6 +276,7 @@ namespace VK_Audio_Bot.BotManager
                     updateDB.DeleteUserTrack(chID, trID);
                     await Bot.AnswerCallbackQueryAsync(callbackQueryEventArgs.CallbackQuery.Id,
                         $"Deleted from playlist");
+                    logevent?.Invoke($"\nTrack {trID} was deleted from {chID} playlist");
                 }
 
                 else if (callbackQueryEventArgs.CallbackQuery.Data.StartsWith("p") &&
@@ -365,21 +371,33 @@ namespace VK_Audio_Bot.BotManager
 
         public void OnClosing()
         {
-            var tracklist = new Dictionary<string, object>();
-
-            foreach (var key in tracks.Keys)
+            try
             {
-                tracklist.Add(key.ToString(), tracks[key]);
-            }
+                var tracklist = new Dictionary<string, object>();
 
-            updateDB.UpdateSInfo("tr", tracklist);
-            tracklist = new Dictionary<string, object>();
-            foreach (var key in playlists.Keys)
+                foreach (var key in tracks.Keys)
+                {
+                    tracklist.Add(key.ToString(), tracks[key]);
+                }
+
+                updateDB.UpdateSInfo("tr", tracklist);
+                tracklist = new Dictionary<string, object>();
+                foreach (var key in playlists.Keys)
+                {
+                    tracklist.Add(key.ToString(), tracks[key]);
+                }
+                updateDB.UpdateSInfo("pl", tracklist);
+            }
+            catch(Exception ex)
             {
-                tracklist.Add(key.ToString(), tracks[key]);
+                logevent(ex.Message);
             }
-            updateDB.UpdateSInfo("pl", tracklist);
+        }
 
+        private void WriteLogFile(string log)
+        {
+            
+            File.AppendAllLines(@"botLog.txt", new string[] { $"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}: {log.Substring(1)}" });
         }
     }
 }

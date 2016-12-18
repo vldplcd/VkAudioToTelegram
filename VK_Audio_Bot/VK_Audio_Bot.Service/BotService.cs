@@ -17,22 +17,10 @@ namespace VK_Audio_Bot.Service
             botm.logevent += AppendLog;
         }
 
-        public async void TestStartupAndStop(string[] args)
-        {
-            OnStart(args);
-            while(true) { }
-            OnStop();
-        }
-
         protected override async void OnStart(string[] args)
         {
             await botm.StartBot();
             
-        }
-        
-        private async void UpdateUsers()
-        {
-            //lw.ReloadUsers(await botm.Usernames());
         }
 
         protected override void OnPause()
