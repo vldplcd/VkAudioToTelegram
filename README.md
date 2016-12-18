@@ -2,7 +2,7 @@
 A Telegram bot that allows to search and listen to vk audio tracks
 
 # Additional info
-You can see explatationary note here: тут будет ссылка на файл, не переписывать же  в конце концов.
+You can see explatationary note here: https://github.com/vldplcd/VkAudioToTelegram/blob/master/Explanatory%20note.pdf
 Video demonstrating application work: https://vk.com/video20485849_456239036
 
 # What should be done to run app on your PC/server
