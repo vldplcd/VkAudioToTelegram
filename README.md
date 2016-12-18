@@ -3,6 +3,7 @@ A Telegram bot that allows to search and listen to vk audio tracks
 
 # Additional info
 You can see explatationary note here: тут будет ссылка на файл, не переписывать же  в конце концов
+Video demonstrating application work: https://vk.com/video?z=video20485849_456239036
 
 # What shold be done to run app on your PC/server
 1. First of all, make sure that you have MongoDB installed on your machine. Our application uses it to manage data about users and tracks.
