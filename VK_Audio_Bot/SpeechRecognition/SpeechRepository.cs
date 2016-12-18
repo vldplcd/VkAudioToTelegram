@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -49,7 +47,7 @@ namespace VK_Audio_Bot.SpeechRecognition
                 using (var client = new HttpClient())
                 {
                     var content = new ByteArrayContent(StreamToBytes(fs));
-                    var request = new HttpRequestMessage(HttpMethod.Post, string.Format(requestUrl, Get16Random(), api_key));                    
+                    var request = new HttpRequestMessage(HttpMethod.Post, string.Format(requestUrl, Get16Random(), api_key));
                     request.Content = content;
                     request.Content.Headers.Add("Content-Type", "audio/ogg; codecs=opus");
 
